@@ -1,2 +1,2 @@
-# kinetic-neurotransmission
+# DYNAMICS OF NEUROMUSCULAR TRANSMISSION REPRODUCED BY CALCIUM-DEPENDENT KINETIC TRANSITIONS IN THE VESICLE FUSION COMPLEX
 Python implementation of the kinetic model of neuromuscular transmission dynamics.
