@@ -1,5 +1,5 @@
-### DYNAMICS OF NEUROMUSCULAR TRANSMISSION REPRODUCED BY CALCIUM-DEPENDENT SERIAL TRANSITIONS IN THE VESICLE FUSION COMPLEX
-# Python implementation of the kinetic model of neuromuscular transmission dynamics.
+## DYNAMICS OF NEUROMUSCULAR TRANSMISSION REPRODUCED BY CALCIUM-DEPENDENT SERIAL TRANSITIONS IN THE VESICLE FUSION COMPLEX
+#### Python implementation of the kinetic model of neuromuscular transmission dynamics.
 
 
 
