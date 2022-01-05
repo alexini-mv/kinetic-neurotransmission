@@ -32,7 +32,7 @@ sinapsis.add_rate_reactions([r_alpha, r_beta, r_rho])
 
 sinapsis.init()
 
-#sinapsis.get_info()
+sinapsis.get_info()
 
 graph = sinapsis.get_graph()
 graph.view()

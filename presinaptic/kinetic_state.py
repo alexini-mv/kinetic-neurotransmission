@@ -1,7 +1,7 @@
 from .synapse import Synapse
 
 class KineticState(Synapse):
-    """Se define el paso cinético dentro del módelo cinético vesicular presináptico
+    """Se define el paso cinético dentro del módelo cinético vesicular presináptico.
 
     Methods
     -------
@@ -22,7 +22,7 @@ class KineticState(Synapse):
         """ Inicializamos el paso cinético del modelo cinético
         
         Parameters
-        __________
+        ----------
         name : str
             Nombre que tendrá el paso cinético
         """
