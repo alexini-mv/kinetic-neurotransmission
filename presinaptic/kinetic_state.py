@@ -68,5 +68,11 @@ class KineticState(Synapse):
         self.__vesicles -= vesicles
 
     def get_info(self):
-        """Imprime información del paso cinético"""
+        """Imprime información del kinetic state.
+        
+        Return
+        ------
+        str
+            Información de los parametros definidos del objeto kinetic_state.
+        """
         print(f"{self.get_name()}\t:\t{self.get_vesicles()}")

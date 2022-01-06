@@ -42,15 +42,50 @@ class Reaction(Synapse):
         self.__destination = destination
 
     def get_rate_reaction(self):
+        """ Regresa el objeto RateReaction asociado a la reacción.
+
+        Return
+        ------
+        rate_reaction object
+        """
         return self.__rate 
 
     def get_origin(self):
+        """ Regresa la información de estado vesicular origen y el número de 
+        vesiculas que transitan por cada reacción.
+
+        Return
+        ------
+        dict
+            Incluye la información de nombre del kinetic_state origen de la
+            reacción, así como el número de vesiculas que transitan.
+        """
         return self.__origin
 
     def get_destination(self):
+        """ Regresa la información de estado vesicular destination y el número
+        de vesiculas que transitan por cada reacción.
+
+        Return
+        ------
+        dict
+            Incluye la información de nombre del kinetic_state destino de la
+            reacción, así como el número de vesiculas que transitan.
+        """
         return self.__destination
 
     def get_info(self):
+        """ Imprime la información del objeto reaction.
+
+        Return
+        ------
+        str
+            Imprime el nombre del objeto reaction, el nombre del objeto velocidad
+            de reacción asociado así como su valor númerico. También imprime si
+            dicha velocidad de reacción será afectada por estimulación externa. 
+            Y finalmente imprime el estado cinético de origen y destino de la
+            reacción.
+        """
         print("="*50)
         print(f"NAME:\t\t{self.get_name()}")
         print(f"RATE NAME:\t{self.__rate.get_name()}")

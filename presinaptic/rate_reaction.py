@@ -1,7 +1,7 @@
 from .synapse import Synapse
 
 class RateReaction(Synapse):
-    """Define el valor de la constante de asociada a un objeto reacción
+    """Define el objeto que guarda la información de la velocidad de reacción.
 
     Methods
     -------
@@ -31,12 +31,36 @@ class RateReaction(Synapse):
         self.__stimulation = stimulation
         
     def get_rate(self):
+        """ Regresa el valor númerico de la velocidad de reacción.
+
+        Return
+        ------
+        int
+            Valor de la velocidad de reacción.
+        """
         return self.__rate
 
     def get_stimulation(self):
+        """ Bandera que indica si la velocidad de reacción será afectada por 
+        una función de estimulación.
+
+        Return
+        ------
+        bool
+            Regresará true la velocidad de reacción será afectada por la 
+            estimulación. En caso contrario, regresará false.
+        """
         return self.__stimulation
 
     def get_info(self):
+        """ Imprime el nombre del objeto, el valor númerico de la velocidad de
+        la velocidad de reacción y si es afectada por estimulación externa.
+
+        Return
+        ------
+        str
+            Información del objeto rate_reaction.
+        """
         print("-"*50)
         print(f"NAME:\t{self.get_name()}")
         print(f"RATE:\t{self.get_rate()}")

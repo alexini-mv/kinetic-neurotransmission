@@ -86,6 +86,16 @@ class StimulationProtocol(Synapse):
 		'''
 		Función que modela el protocolo de estimulación externa de la sinapsis neuromuscular.
 		En este modelo, se utiliza un perfil de estímulo con caida exponencial.
+
+		Parameters
+		----------
+		t : float
+			Variable que modela el tiempo dentro de la simulación.
+
+		Return
+		------
+		float
+			El valor del estimulo en el tiempo t.
 		'''
 
 		delta_time = t - self.__time_start_stimulation
