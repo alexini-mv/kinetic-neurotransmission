@@ -3,10 +3,10 @@ import math
 import matplotlib.pyplot as plt 
 from numpy import vectorize
 
-from .synapse import Synapse
+from .neuromuscular import Synapse
 
-class StimulationProtocol(Synapse):
-	"""Definimos el protocolo de estimulación que se utilizará para cambiar
+class Stimulation(Synapse):
+	"""Definimos el calcium-dependence estimulación que se utilizará para cambiar
 	los valores de las constantes de reacción definidas en el objeto RateReaction
 
 	Methods
@@ -22,28 +22,28 @@ class StimulationProtocol(Synapse):
 		por el arreglo t
 	"""
 
-	def __init__(self, time_start_stimulation, conditional_stimulis, period, 
-		tau_stimulation, intensity_stimuli, time_wait_test,  
-		type_stimuli='exponential_decay', name="Stimulation Protocol"):
+	def __init__(self, time_start_stimulation, conditional_stimuli, period, 
+		tau_stimulation, intensity_stimulus, time_wait_test,  
+		type_stimulus='exponential_decay', name="Stimulation Protocol"):
 		"""Se inicializa el objeto StimulationProtocol
 
 		Parameters
 		----------
 		time_start_stimulation : float
 			Tiempo en el cual inicia la estimulación dentro de la simulación
-		conditional_stimulis : int
+		conditional_stimuli : int
 			Numero de estimulos condicionales
 		period : float
 			Tiempo de espera entre cada estimulo condicional. En caso de que el
 			número de estimulos condicionales sea uno, el periodo se omite
 		tau_stimulation : float
 			Constante de tiempo que caracteriza la duración del estimulo
-		intensity_stimuli : float
+		intensity_stimulus : float
 			Intensidad máxima de cada estimulo definido en unidades arbitrarias
 		time_wait_test : float
 			Intervalo de tiempo de espera entre el último estimulo condicional
 			y el estimulo de prueba
-		type_stimuli : str, opcional
+		type_stimulus : str, opcional
 			Tipo del perfil de cada estimulo individual. Por default el valor
 			del parametro es 'exponential_delay' que corresponde a un estimulo 
 			con subida instantanea a la intensidad máxima, seguida de un 
@@ -55,32 +55,32 @@ class StimulationProtocol(Synapse):
 
 		super().__init__(name)
 
-		assert type_stimuli == 'exponential_decay', \
-			f"The object '{self.__class__.__name__}' no accept '{type_stimuli}' argument of type_stimuli."
+		assert type_stimulus == 'exponential_decay', \
+			f"The object '{self.__class__.__name__}' no accept '{type_stimulus}' argument of type_stimuli."
 		
 		epsilon = 0.005
-		self.__conditional_stimulis = conditional_stimulis
+		self.__conditional_stimuli = conditional_stimuli
 		self.__period = period
 		self.__time_start_stimulation = time_start_stimulation
 		self.__tau_stimulation = tau_stimulation
 		self.__time_wait_test = time_wait_test
-		self.__intensity_stimuli = intensity_stimuli
-		self.__type_stimuli = type_stimuli
+		self.__intensity_stimulus = intensity_stimulus
+		self.__type_stimulus = type_stimulus
 
-		self.__time_end_stimulation = time_start_stimulation + (conditional_stimulis 
-																		- 1) * period + epsilon
+		self.__time_end_stimulation = time_start_stimulation + (conditional_stimuli 
+															   - 1) * period + epsilon
 
 	def get_info(self):
 		print("**** Información con los detalles del protocolo de estimulación. ****")
 		print(f"Nombre del protocolo de estimulación:\t\t{self.get_name()}")
-		print(f"Tipo de estímulo:\t\t\t\t {self.__type_stimuli}")
-		print(f"Número de estímulos condicionales:\t\t {self.__conditional_stimulis}")
+		print(f"Tipo de estímulo:\t\t\t\t {self.__type_stimulus}")
+		print(f"Número de estímulos condicionales:\t\t {self.__conditional_stimuli}")
 		print(f"Tiempo de inicio de estimulación:\t\t {self.__time_start_stimulation}")
 		print(f"Tiempo de finalización de estimulación:\t\t {self.__time_end_stimulation}")
 		print(f"Period entre estímulos:\t\t\t {self.__period}")
 		print(f"Tau de estimulación:\t\t\t\t {self.__tau_stimulation}")
 		print(f"Espera entre el último condicional y test:\t {self.__time_wait_test}")
-		print(f"Intensidad del estimulo:\t\t\t {self.__intensity_stimuli}")
+		print(f"Intensidad del estimulo:\t\t\t {self.__intensity_stimulus}")
 
 	def stimuli(self, t):
 		'''
@@ -100,19 +100,19 @@ class StimulationProtocol(Synapse):
 
 		delta_time = t - self.__time_start_stimulation
 
-		time_test = self.__time_start_stimulation + (self.__conditional_stimulis 
+		time_test = self.__time_start_stimulation + (self.__conditional_stimuli 
 														- 1) * self.__period + self.__time_wait_test
 														
 		if t >= self.__time_start_stimulation and t < self.__time_end_stimulation:
 			f = math.exp(-(delta_time % self.__period) / self.__tau_stimulation)
 		elif t >= self.__time_end_stimulation and t < time_test:
-			f = math.exp(-(delta_time - (self.__conditional_stimulis - 1) * self.__period) / self.__tau_stimulation)
+			f = math.exp(-(delta_time - (self.__conditional_stimuli - 1) * self.__period) / self.__tau_stimulation)
 		elif t >= time_test:
 			f = math.exp(-(t - time_test) / self.__tau_stimulation)
 		else:
 			f = 0.0
 		
-		return self.__intensity_stimuli * f
+		return self.__intensity_stimulus * f
 
 	def plot(self, t, xlabel="Time", ylabel="Intensity"):
 		"""Grafica el protocolo de estimulación dentro de un intervalo de tiempo

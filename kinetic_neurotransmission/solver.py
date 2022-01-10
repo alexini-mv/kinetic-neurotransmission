@@ -11,7 +11,7 @@ class Solver:
 
     Methods
     -------
-    stationary_state
+    resting_state
         Metodo encargado de simular el modelo hasta alcanzar su estado de reposo.
     run
         Metodo encargado de correr el algoritmo de simulación. En este caso, está
@@ -24,13 +24,13 @@ class Solver:
     get_results
         Regresa un DataFrame de Pandas con el resultado de la simulación del 
         modelo.
-    get_stationary_simulation
+    get_resting_simulation
         Regresa un DataFrame de Pandas con el resultado de la simulación del 
         modelo cuando se busca el estado estacionario.
     gillespie
         Metodo privado en donde se establece el algoritmo de Gillespie.
     """
-    def __init__(self, synapse, protocol):
+    def __init__(self, model, stimulation):
         """ Inicializamos el objeto Solver, con el modelo previamente definido y
         el protocolo de estimulación
 
@@ -43,11 +43,11 @@ class Solver:
             Objeto definico que contiene la información del protocolo de 
             estimulación externa a lo largo del tiempo.
         """
-        self.__synapse = synapse
-        self.__protocol = protocol
-        self.__stationary_state = False
+        self.__model = model
+        self.__stimulation = stimulation
+        self.__resting_state = False
 
-    def stationary_state(self, time_end=30.0):
+    def resting_state(self, time_end=30.0):
         """ Simula el modelo en su estado inicial y lo lleva al estado 
         estacionario o de reposo. Para esto, utiliza el algoritmo de Gillespie
         para evolucionar en el tiempo al modelo.
@@ -59,8 +59,8 @@ class Solver:
             estacionario. La unidad de tiempo se miden en segundos.
         """
         self.__gillespie(repeat=1, time_end=time_end, time_save=0.1, init_basal_state=True)
-        self.__synapse.set_stationary_state()
-        self.__stationary_state = True
+        self.__model.set_resting_state()
+        self.__resting_state = True
 
     def run(self, repeat=1, time_end=1.0, time_save=0.0001, method='gillespie'):
         """ Metodo encargado de invocar al algoritmo encargado de evolucionar
@@ -81,10 +81,10 @@ class Solver:
             Actualmente sólo acepta 'gillespie'.
         """
 
-        if not self.__stationary_state: 
-            message = "You have not set the stationary state of the \
-                synapse. All simulations will start in a different state \
-                than the stationary state."
+        if not self.__resting_state: 
+            message = "You have not set the resting state of the \
+                model. All simulations will start in a different state \
+                than the resting state."
             warnings.warn(message, Warning, stacklevel=2)
 
         if method == 'gillespie':
@@ -108,7 +108,7 @@ class Solver:
             resultados en el atributo privado results.
         """
         if init_basal_state:
-            self.__stationary_state_simulation = pd.DataFrame(results).set_index(['run', 'time'])
+            self.__resting_state_simulation = pd.DataFrame(results).set_index(['run', 'time'])
         else:
             self.__results = pd.DataFrame(results).set_index(['run', 'time'])
 
@@ -128,11 +128,11 @@ class Solver:
         else:       
             return self.__results
 
-    def get_stationary_simulation(self):
+    def get_resting_simulation(self):
         """ Regresa el DataFrame de Pandas con la evolución temporal del modelo
         durante la busqueda del estado estacionario del mismo.
         """
-        return self.__stationary_state_simulation.mean(level=1)
+        return self.__resting_state_simulation.mean(level=1)
 
 
     def __gillespie(self, repeat, time_end, time_save, init_basal_state=False):
@@ -156,7 +156,7 @@ class Solver:
         results = []
         for i in range(repeat):
             # Initialize the synapse in its stationary state previamente hallado.
-            self.__synapse.set_initial_state(self.__synapse.get_stationary_state())
+            self.__model.set_initial_state(self.__model.get_resting_state())
 
             t = 0.0
             tsave = 0.0
@@ -166,18 +166,18 @@ class Solver:
                 #--------------------------------------------------------------
                 # Se calculan los valores de propensión para cada reacción
                 #--------------------------------------------------------------
-                for name, item in self.__synapse.get_reactions().items():
+                for name, item in self.__model.get_transitions().items():
                     storage = list(item.get_origin().keys())[0]
-                    dummy_vesicles = self.__synapse.get_kinetic_states()[storage].get_vesicles()
+                    dummy_vesicles = self.__model.get_transition_states()[storage].get_vesicles()
                     
-                    if item.get_rate_reaction().get_stimulation() and not init_basal_state:
+                    if item.get_rate_constant().get_stimulation() and not init_basal_state:
                         #------------------------------------------------------
                         # Aquí se incluye la contribución de la estimulación
                         # externa
                         #------------------------------------------------------
-                        dummy_rate = item.get_rate_reaction().get_rate() + self.__protocol.stimuli(t)
+                        dummy_rate = item.get_rate_constant().get_rate() + self.__stimulation.stimuli(t)
                     else:
-                        dummy_rate = item.get_rate_reaction().get_rate()
+                        dummy_rate = item.get_rate_constant().get_rate()
 
                     a.update({name: dummy_rate * dummy_vesicles})
                 #--------------------------------------------------------------
@@ -195,20 +195,20 @@ class Solver:
                     # en una lista temporal.
                     #----------------------------------------------------------
                     dummy = {"run":i, "time": round(tsave, 9)}
-                    dummy.update(self.__synapse.get_current_state())
+                    dummy.update(self.__model.get_current_state())
                     results.append(dummy)
 
                     tsave += time_save
 
                 #--------------------------------------------------------------
-                # Se elige aleatoreamente la reacción que se ejecutará en el 
-                # modelo
+                # Se elige aleatoreamente la siguiente transición que se 
+                # ejecutará en dentro del modelo
                 #--------------------------------------------------------------
                 r2a0 = random() * a0
                 accumulative = 0.0
 
                 for key, value in a.items():
-                    reaction_name = key
+                    transition_name = key
                     accumulative += value
 
                     if accumulative < r2a0:
@@ -220,17 +220,17 @@ class Solver:
                 # Se obtienen los información guardada del objeto de la 
                 # reacción elegida.
                 #--------------------------------------------------------------
-                reaction = self.__synapse.get_reactions()[reaction_name]
+                transition = self.__model.get_transitions()[transition_name]
 
-                origin, vesicles_origin = list(reaction.get_origin().items())[0]
-                destination, vesicles_destination = list(reaction.get_destination().items())[0]
+                origin, vesicles_origin = list(transition.get_origin().items())[0]
+                destination, vesicles_destination = list(transition.get_destination().items())[0]
 
                 #--------------------------------------------------------------
                 # Se actualiza el número de vesiculas en los estados cinéticos 
                 # implicados en la reacción elegida.
                 #--------------------------------------------------------------
-                self.__synapse.get_kinetic_states()[origin].pop_vesicle(vesicles_origin)
-                self.__synapse.get_kinetic_states()[destination].add_vesicle(vesicles_destination)
+                self.__model.get_transition_states()[origin].pop_vesicle(vesicles_origin)
+                self.__model.get_transition_states()[destination].add_vesicle(vesicles_destination)
 
                 #--------------------------------------------------------------
                 # Se repite el algoritmo hasta alcanzar tiempo final de la 

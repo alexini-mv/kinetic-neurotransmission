@@ -1,11 +1,11 @@
-from .synapse import Synapse
+from .neuromuscular import Synapse
 
-class Reaction(Synapse):
-    """Se define las reacciones entre dos estados cinéticos vesiculares presinapticos
+class Transition(Synapse):
+    """Define la transición entre dos estados cinéticos vesiculares presinapticos
     
     Methods
     -------
-    get_rate_reaction
+    get_rate_constant
         Regresa el objeto rate_reaction asociado la transición cinética
     get_origin
         Regresa un diccionario donde está definido el nombre del paso cinético
@@ -19,13 +19,13 @@ class Reaction(Synapse):
         también si el valor constante es afectada por estimulación externa,
         el paso cinético de origen y de destino de la reacción
     """
-    def __init__(self, name, rate, origin={}, destination={}):
+    def __init__(self, name, rate_constant, origin={}, destination={}):
         """
         Parameters
         ----------
         name : str
             Nombre con el cual se identificará la reacción
-        rate : rate_reaction object
+        rate_constant : rate_constant object
             Objeto de la clase RateReaction asociado a la reacción
         origin : dict
             Diccionario con Key como el nombre del paso cinético de origen de
@@ -37,11 +37,11 @@ class Reaction(Synapse):
             en dicha transición.
         """
         super().__init__(name)
-        self.__rate = rate
+        self.__rate = rate_constant
         self.__origin = origin
         self.__destination = destination
 
-    def get_rate_reaction(self):
+    def get_rate_constant(self):
         """ Regresa el objeto RateReaction asociado a la reacción.
 
         Return
@@ -86,11 +86,11 @@ class Reaction(Synapse):
             Y finalmente imprime el estado cinético de origen y destino de la
             reacción.
         """
-        print("="*50)
+        print("-"*52)
         print(f"NAME:\t\t{self.get_name()}")
-        print(f"RATE NAME:\t{self.__rate.get_name()}")
-        print(f"RATE VALUE:\t{self.__rate.get_rate()}")
-        print(f"STIMULATION:\t{self.__rate.get_stimulation()}")
+        print(f"RATE CONSTANT NAME:\t{self.__rate.get_name()}")
+        print(f"RATE CONSTANT VALUE:\t{self.__rate.get_rate()} s⁻¹")
+        print(f"CALCIUM-DEPENDENT:\t{self.__rate.get_stimulation()}")
         print(f"ORIGIN:\t\t{self.__origin}")
         print(f"DESTINATION:\t{self.__destination}")
 

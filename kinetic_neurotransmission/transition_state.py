@@ -1,6 +1,6 @@
-from .synapse import Synapse
+from .neuromuscular import Synapse
 
-class KineticState(Synapse):
+class TransitionState(Synapse):
     """Se define el paso cinético dentro del módelo cinético vesicular presináptico.
 
     Methods
@@ -68,11 +68,11 @@ class KineticState(Synapse):
         self.__vesicles -= vesicles
 
     def get_info(self):
-        """Imprime información del kinetic state.
+        """Imprime información del objeto TransitionState.
         
         Return
         ------
         str
-            Información de los parametros definidos del objeto kinetic_state.
+            Información de los parametros definidos del objeto TransitionState.
         """
         print(f"{self.get_name()}\t:\t{self.get_vesicles()}")

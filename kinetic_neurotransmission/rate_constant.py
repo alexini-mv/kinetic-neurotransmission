@@ -1,6 +1,6 @@
-from .synapse import Synapse
+from .neuromuscular import Synapse
 
-class RateReaction(Synapse):
+class RateConstant(Synapse):
     """Define el objeto que guarda la información de la velocidad de reacción.
 
     Methods
@@ -14,20 +14,20 @@ class RateReaction(Synapse):
         Imprime la información general del objeto, como es el nombre de la 
         constante de reacción, su valor y si es afectada por la estimulación
     """
-    def __init__(self, name, rate, stimulation=False):
+    def __init__(self, name, value, stimulation=False):
         """
         Parameters
         ----------
         name : str
             Nombre de la constante de reacción
-        rate : float
+        value : float
             Valor que tendrá la constante de reacción
         stimulation : bool, optional
             Una bandera para indicar si está constante de reacción será afectada
             por la estimulación de la sinapsis. Default is False
         """
         super().__init__(name)
-        self.__rate = rate
+        self.__rate = value
         self.__stimulation = stimulation
         
     def get_rate(self):
@@ -59,9 +59,9 @@ class RateReaction(Synapse):
         Return
         ------
         str
-            Información del objeto rate_reaction.
+            Información del objeto rate_constant.
         """
         print("-"*50)
-        print(f"NAME:\t{self.get_name()}")
-        print(f"RATE:\t{self.get_rate()}")
-        print(f"STIMULATION:\t{self.get_stimulation()}")
+        print(f"NAME:\t\t{self.get_name()}")
+        print(f"RATE CONSTANT:\t{self.get_rate()} s⁻¹")
+        print(f"CALCIUM-DEPENDENT:\t{self.get_stimulation()}")
