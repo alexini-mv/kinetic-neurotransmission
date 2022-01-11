@@ -82,16 +82,16 @@ class Solver:
         """
 
         if not self.__resting_state: 
-            message = "You have not set the resting state of the \
-                model. All simulations will start in a different state \
-                than the resting state."
+            message = "You have not set the resting state of the " + \
+            "model. All simulations will start in a different state " + \
+            "than the resting state."
             warnings.warn(message, Warning, stacklevel=2)
 
         if method == 'gillespie':
             self.__gillespie(repeat=repeat, time_end=time_end, time_save=time_save)
         else:
-            message = f"Undefined method in '{self.__class__.__name__}'. \
-                The currently defined method is 'gillespie'."
+            message = f"Undefined method in '{self.__class__.__name__}'. " + \
+            "The currently defined method is 'gillespie'."
             raise Exception(message)
 
     def __save_results(self, results: list, init_basal_state: bool):
