@@ -114,7 +114,7 @@ class Stimulation(Synapse):
 		
 		return self.__intensity_stimulus * f
 
-	def plot(self, t, xlabel="Time", ylabel="Intensity"):
+	def plot(self, t, xlabel="Time (s)", ylabel="Intensity"):
 		"""Grafica el protocolo de estimulación dentro de un intervalo de tiempo
 		Parameters
 		----------

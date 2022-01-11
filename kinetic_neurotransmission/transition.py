@@ -90,7 +90,7 @@ class Transition(Synapse):
         print(f"NAME:\t\t{self.get_name()}")
         print(f"RATE CONSTANT NAME:\t{self.__rate.get_name()}")
         print(f"RATE CONSTANT VALUE:\t{self.__rate.get_rate()} s⁻¹")
-        print(f"CALCIUM-DEPENDENT:\t{self.__rate.get_stimulation()}")
+        print(f"CALCIUM-DEPENDENT:\t{self.__rate.get_calcium_dependent()}")
         print(f"ORIGIN:\t\t{self.__origin}")
         print(f"DESTINATION:\t{self.__destination}")
 

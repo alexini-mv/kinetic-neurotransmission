@@ -1,7 +1,9 @@
 #!/usr/bin/python3
 import time 
 
+from numpy import arange
 import matplotlib.pyplot as plt
+
 
 from kinetic_neurotransmission import KineticModel, TransitionState, Transition, RateConstant
 from kinetic_neurotransmission import Stimulation, Solver
@@ -15,7 +17,7 @@ pprimed = TransitionState(name='pPrimed')
 primed = TransitionState(name='Primed')
 fusion = TransitionState(name='Fusion')
 
-r_alpha = RateConstant(name="α", value=alpha, stimulation=True)
+r_alpha = RateConstant(name="α", value=alpha, calcium_dependent=True)
 r_beta = RateConstant(name="β", value=beta)
 r_rho = RateConstant(name="ρ", value=rho)
 
@@ -37,22 +39,27 @@ model.get_info()
 #graph = model.get_graph()
 #graph.view()
 
-# protocol = Stimulation(
-#     conditional_stimuli=3,
-#     period=0.3,
-#     time_start_stimulation=0.1,
-#     tau_stimulation=0.001,
-#     time_wait_test=0.1,
-#     intensity_stimulus=500.0)
+protocol = Stimulation(
+     conditional_stimuli=3,
+     period=0.03,
+     time_start_stimulation=0.1,
+     tau_stimulation=0.0013,
+     time_wait_test=0.45,
+     intensity_stimulus=500.0)
 
-# # t = arange(0, 90, 0.1)
-# # protocol.plot(t)
+# t = arange(0, 1.0, 0.0001)
+# protocol.plot(t)
 
-# experiment = Solver(model=model, stimulation=protocol)
-# start = time.time()
-# experiment.resting_state()
-# print(time.time()-start)
-# experiment.run(repeat=1)
+experiment = Solver(model=model, stimulation=protocol)
+experiment.resting_state(time_end=10.0)
 
 # experiment.get_resting_simulation().plot()
 # plt.show()
+
+print("Running the experiment:")
+
+experiment.run(repeat=1)
+resultados = experiment.get_results(mean=True)
+resultados.plot()
+plt.show()
+

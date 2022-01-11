@@ -39,7 +39,7 @@ class Solver:
         synapse: Model object
             Modelo que se simulará. Este modelo debe incluir los estados 
             cinéticos, los objetos reacciones, los objetos velocidades de reacción.
-        protocol: StimulationProtocol object
+        stimulation: Stimulation object
             Objeto definico que contiene la información del protocolo de 
             estimulación externa a lo largo del tiempo.
         """
@@ -122,6 +122,10 @@ class Solver:
             modelo, promediado sobre el número total de repeticiones. En caso 
             contrario, regresará la evolución temporal de cada una de 
             la repeticiones.
+
+        Return
+        ------
+        Return a Pandas.DataFrame Object.
         """
         if mean:
             return self.__results.mean(level=1)
@@ -170,7 +174,7 @@ class Solver:
                     storage = list(item.get_origin().keys())[0]
                     dummy_vesicles = self.__model.get_transition_states()[storage].get_vesicles()
                     
-                    if item.get_rate_constant().get_stimulation() and not init_basal_state:
+                    if item.get_rate_constant().get_calcium_dependent() and not init_basal_state:
                         #------------------------------------------------------
                         # Aquí se incluye la contribución de la estimulación
                         # externa
