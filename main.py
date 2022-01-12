@@ -43,7 +43,7 @@ protocol = Stimulation(
      conditional_stimuli=3,
      period=0.03,
      time_start_stimulation=0.1,
-     tau_stimulation=0.0013,
+     tau_stimulus=0.0013,
      time_wait_test=0.45,
      intensity_stimulus=500.0)
 
@@ -51,8 +51,11 @@ protocol = Stimulation(
 # protocol.plot(t)
 
 experiment = Solver(model=model, stimulation=protocol)
-experiment.resting_state(time_end=10.0)
+experiment.resting_state(time_end=15.0)
 
+print("Resting State of Model")
+print(model.get_resting_state())
+print("")
 # experiment.get_resting_simulation().plot()
 # plt.show()
 
