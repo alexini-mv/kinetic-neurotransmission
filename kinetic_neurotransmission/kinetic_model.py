@@ -2,178 +2,174 @@ from graphviz import Digraph
 from .neuromuscular import Synapse
 
 class KineticModel(Synapse):
-    """Se define el modelo cinético para modelar las fases de 
-    maduración de las vesículas en la terminal sináptica nerviosa.
+    """Defines the kinetic model for modeling vesicle maturation transitions 
+    at the neuromuscular junction.
 
     Attributs
     ---------
     vesicles : int
-        Número de vesiculas totales que se simularán en el modelo cinético.
+        Total number of vesicles simulated in the kinetic model.
     transition_states : dict
-        Diccionario con el nombre y valores de los objetos transition_state del modelo.
+        Dictionary with the name and values of the TransitionState objects 
+        defined in the model.
     transitions : dict
-        Diccionario con el nombre y valores de los objetos reaction del modelo.
+        Dictionary with the name and values of the Transition objects defined 
+        in the model.
     rates : dict
-        Diccionario con el nombre y valores de los objetos velocidades de transición 
-        entre los kinetic_state vesiculares del modelo.
+        Dictionary with the name and values of the RateConstant objects 
+        associated to each Transition object within the model.
 
     Methods
     -------
     add_rate_constants(rates : list)
-        Agrega al modelo la lista de todos los objetos velocidades de cada
-        transición cinética vesicular.
+        Adds to the model a list of all RateConstant objects of each vesicular 
+        kinetic transition.
     add_transition_states(transition_states : list)
-        Agrega al modelo la lista de todos los objetos transition_state que componen
-        al modelo.
+        Adds to the model a list of all the TransitionState objects that 
+        constitute the model.
     add_transitions(transitions : list)
-        Agrega al modelo la lista de todas las reacciones entre los kinetic_state 
-        del modelo.
+        Adds to the model a list of all the Transitions objects between the 
+        TransitionState objects within the model.
     get_vesicle
-        Imprime el numero total de vesiculas que se están simulando en el modelo.
+        Returns the total number of vesicles that are simulated in the model.
     get_transition_states
-        Regresa una lista con todos los estados cinéticos definidos en el 
-        modelo.
+        Returns a list of all TransitionState object defined within the model.
     get_transitions
-        Regresa una lista con todos las reacciones entre estados cinéticos 
-        definidos en el modelo.
+        Returns a list of all Transition objects defined in the model.
     get_current_state
-        Regresa un diccionario con el nombre y número de vesículas instantaneo en 
-        cada uno de los estados cinéticos definidos en el modelo.
+        Returns a dictionary with the name and number of instantaneous vesicles
+        in each of the TransitionState objects defined in the model.
     get_info
-        Regresa varios strings con la información general del modelo, es decir, 
-        el nombre de las estados cinéticos vesiculares, reacciones entre estados
-        cinéticos, velocidades de reacción, número de vesiculas simuladas.
+        Prints the general information of the model, i.e. the name and status 
+        of the TransitionState, Transition, RateConstant objects.
     init
-        Inicializa el modelo con los objetos agregados y prepararlo para comenzar 
-        la simulación.
+        Initializes the model with the added objects and prepares it to start 
+        the simulation.
     set_initial_state(dictionary_state : dict)
-        Se establece un estado inicial del modelo (nombre y número de vesiculas
-        en cada estado cinetico vesicular) a partir del cual se simulará el modelo.
+        An initial state of the model is established (name and number of 
+        vesicles in each TransitionState object) from which the model will be 
+        simulated.
     set_resting_state
-        Se define el attribut privado resting_state que guardará el estado 
-        resting del modelo.
+        Sets the model resting state.
     get_resting_state
-        Regresa un diccionario con el nombre y el número de vesiculas en cada
-        estado cinético vesicular correspondiente al resting state del modelo.
+        Returns a dictionary with the name and number of vesicles in each 
+        TransitionState object corresponding to the model resting state.
     get_graph
-        Regresa un grafo con la información de modelo, es decir, el nombre de 
-        los estados cinéticos vesiculares, reacciones y velocidades de reacción.
+        It generates a graph with the model information, i.e. the name of 
+        the vesicular kinetic states, transitions and rate constants.
     """
 
-    def __init__(self, name, vesicles=10000):
-        """ Inicializamos el modelo cinético para simular las transiciones
-        entre los diferentes estados vesiculares.
+    def __init__(self, name="Kinetic Model", vesicles=10000):
+        """The kinetic model is initialized to simulate the transitions 
+        between different vesicular states.
 
         Parameters
         ----------
-        name : str
-            Nombre del modelo.
+        name : str, optional
+            Model name.
         vesicles : int, optional
-            Número total de vesiculas que serán simuladas en el modelo.
+            Total number of vesicles to be simulated in the model.
         """
         super().__init__(name)
         self.__vesicles = vesicles
 
     def __dict_items(self, list_items):
-        """ Función auxiliar para convertir una lista de items a un diccionario
+        """Auxiliary function to convert a list of items to a dictionary.
         
         Parameters
         ----------
         list_items : list
-            Lista de items que será convertido en diccionario.
+            List of items to be converted into a dictionary.
 
         Return
         ------
         dict
-            Diccionario con el nombre de cada item como key, y el objeto como 
-            valor.
+            Dictionary with the name of each item and the object.
         """
         return {item.get_name(): item for item in list_items}
 
     def add_rate_constants(self, rates=[]):
-        """ Agrega una lista de objetos tipo rate_reaction al modelo.
+        """Adds a list of RateConstant objects inside the model.
 
         Parameters
         ----------
         rates : list
-            Lista de objetos tipo rate_reaction.
+            List of RateConstant objects.
         """
         self.__rates = self.__dict_items(rates)
 
     def add_transition_states(self, transition_states=[]):
-        """ Agrega una lista de objetos tipo kinetic_state al modelo.
+        """Adds a list of TransitionState objects inside the model.
 
         Parameters
         ----------
         transition_states : list
-            Lista de objetos tipo kinetic_state.
+            List of TransitionState objects.
         """
         self.__transition_states = self.__dict_items(transition_states)
 
     def add_transitions(self, transitions=[]):
-        """ Agrega una lista de objetos tipo reaction al modelo.
+        """Adds a list of Transition objects inside the model.
 
         Parameters
         ----------
         transitions : list
-            Lista de objetos tipo reaction.
+            List of Transition objects.
         """
         self.__transitions = self.__dict_items(transitions)
     
     def get_vesicles(self):
-        """ Imprime el número de vesiculas totales que se simulan en el modelo.
+        """Returns the total number of vesicles simulated in the model.
         
         Return
         ------
         int
-            Número de vesiculas totales en el modelo.
+            Total number of vesicles in the model.
         """
         return self.__vesicles
 
     def get_transition_states(self):
-        """ Regresa un diccionario con todos los objetos kinetic_state en el 
-        modelo.
+        """Returns a dictionary with all the TransitionState objects 
+        defined within the model.
 
         Return
         ------
         dict
-            Diccionario con todos los objetos del tipo kinetic_state del modelo.
+            A dictionary with all the TransitionState objects.
         """
         return self.__transition_states
 
     def get_transitions(self):
-        """ Regresa un diccionario con todos los objetos reaction en el 
-        modelo.
+        """Returns a dictionary with all the Transition objects 
+        defined within the model.
 
         Return
         ------
         dict
-            Diccionario con todos los objetos del tipo reaction del modelo.
+            Dictionary with the Transition objects of the model.
         """
         return self.__transitions
 
     def get_current_state(self):
-        """ Regresa el nombre y el número de vesiculas en cada estado cinetico 
-        vesicular en el presente.
+        """Returns the name and number of vesicles in each TransitionState 
+        in the current state of the model.
 
         Return
         ------
         dict
-            Diccionario con el nombre del cada estado cinetico vesicular como 
-            key, y el número de vesiculas como value.
+            Dictionary with the name of each TransitionState and the number of 
+            vesicles in that state.
         """
         return {name: item.get_vesicles() for name, item in self.__transition_states.items()}
 
     def get_info(self):
-        """ Regresa la información general del modelo.
+        """Returns the general information of the model.
 
         Return
         ------
         str
-            Información general definida dentro del modelo: Nombre del modelo, 
-            número total de vesicular, nombre de los estados cinéticos 
-            vesiculares, nombre de las reacciones y el valor de las velocidades
-            de reacción.
+            Prints the model name, including the total number of vesicles, and 
+            the information of the TransitionState, Transition and RateConstant objects.
         """
         print("="*16 + " MODEL INFORMATION " + "="*16)
         print(f"MODEL NAME:\t{self.get_name()}")
@@ -185,8 +181,7 @@ class KineticModel(Synapse):
         print("="*52)
 
     def init(self):
-        """ Inicializa el modelo con el número de vesiculas y los estados 
-        cinéticos.
+        """Initializes the model and prepares it before running any simulation.
         """
         for _, value in self.__transition_states.items():
             value.update(self.__vesicles)
@@ -194,35 +189,36 @@ class KineticModel(Synapse):
         self.set_resting_state()
 
     def set_initial_state(self, dictionary_state):
-        """ Establece un estado inicial para el modelo.
+        """Sets a particular initial state for the model.
 
         Parameters
         ----------
         dictionary_state: dic
-            Diccionario con el nombre de objetos tipo estados cinéticos 
-            y el número de vesiculas particular en cada estado.
+            Dictionary with the name of all TransitionState objects and the 
+            number of vesicles in each state.
         """
         for name, state in self.__transition_states.items():
             state.update(dictionary_state[name])
 
     def set_resting_state(self):
-        """ Guarda el estado estacionario del modelo.
+        """Sets the model resting state.
         """
         self.__resting_state = self.get_current_state()
 
     def get_resting_state(self):
-        """ Regresa los valores del estado estacionario del modelo.
+        """Returns the values of the model defined in its resting state.
+
         Return
         ------
         dict
-            Diccionario con el estado estacionario del modelo.
+            Dictionary with the model resting state.
         """
         return self.__resting_state
 
     def get_graph(self):
-        """ Genera un grafo con la información del modelo. Es decir, el nombre
-        del modelo, nombre de los estados cinéticos vesiculares, reacciones
-        cinéticas entre ellos, y el valor de las velocidades de cada reacción.
+        """Generates a graph with the model information, i.e., the model name, 
+        the names of the TransitionsState, the transitions between them, and the 
+        value of their corresponding rate constants.
         """
         f = Digraph('Neuromuscular Synapse', 
                     filename='graph_model',

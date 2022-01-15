@@ -8,9 +8,17 @@ import matplotlib.pyplot as plt
 from kinetic_neurotransmission import KineticModel, TransitionState, Transition, RateConstant
 from kinetic_neurotransmission import Stimulation, Solver
 
-from parameters import *
+# Define simulation parameters
 
-model = KineticModel(name='Kinetic Neuromuscular Transmission', vesicles=numero_vesiculas)
+alpha = 1.43
+lamda = 100
+beta = alpha * lamda
+rho = 1.0
+vesicles = 10000
+
+# Instantiate the model objects
+
+model = KineticModel(name='Kinetic Neuromuscular Transmission', vesicles=vesicles)
 
 docked = TransitionState(name='Docked')
 pprimed = TransitionState(name='pPrimed')
@@ -43,18 +51,25 @@ protocol = Stimulation(
      conditional_stimuli=3,
      period=0.03,
      time_start_stimulation=0.1,
-     tau_stimulation=0.0013,
+     tau_stimulus=0.0013,
      time_wait_test=0.45,
      intensity_stimulus=500.0)
 
 # t = arange(0, 1.0, 0.0001)
 # protocol.plot(t)
 
-experiment = Solver(model=model, stimulation=protocol)
-experiment.resting_state(time_end=10.0)
+# We look for the resting state of the model.
 
+experiment = Solver(model=model, stimulation=protocol)
+experiment.resting_state(time_end=30.0)
+
+print("Resting State of Model")
+print(model.get_resting_state())
+print("")
 # experiment.get_resting_simulation().plot()
 # plt.show()
+
+# Run the stochastic simulation.
 
 print("Running the experiment:")
 

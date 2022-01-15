@@ -1,67 +1,68 @@
 from .neuromuscular import Synapse
 
 class RateConstant(Synapse):
-    """Define el objeto que guarda la información de la velocidad de reacción.
+    """Defines the object that will store the rate constant information 
+    associated to each Transition object.
 
     Methods
     -------
     get_rate : float
-        Regresa el valor numérico de la constate de reacción
+        Returns the numerical value of the rate constant.
     get_calcium_dependent : bool
-        Regresa un True si la constante cambia de valor durante la estimulación,
-        en caso contrario, regresa un False
-    get_info
-        Imprime la información general del objeto, como es el nombre de la 
-        constante de reacción, su valor y si es afectada por la estimulación
+        Returns True if the rate constant is affected by the stimulation. 
+        Otherwise, it returns False.
+    get_info: str
+        Returns the general information of the object, i.e. the name of the 
+        RateConstant, its numerical value and whether it is affected by 
+        stimulation.
     """
     def __init__(self, name, value, calcium_dependent=False):
         """
         Parameters
         ----------
         name : str
-            Nombre de la constante de reacción
+            Name of rate constant.
         value : float
-            Valor que tendrá la constante de reacción
+            Value of the rate constant.
         calcium_dependent : bool, optional
-            Una bandera para indicar si está constante de reacción será afectada
-            por la estimulación de la sinapsis. Default is False
+            Flag to indicate if this rate constant is affected by 
+            stimulation. Default is False.
         """
         super().__init__(name)
         self.__rate = value
         self.__calcium_dependent = calcium_dependent
         
     def get_rate(self):
-        """ Regresa el valor númerico de la velocidad de reacción.
+        """Returns the numerical value of the rate constant.
 
         Return
         ------
-        int
-            Valor de la velocidad de reacción.
+        float
+            Value of the rate constant.
         """
         return self.__rate
 
     def get_calcium_dependent(self):
-        """ Bandera que indica si la velocidad de reacción será afectada por 
-        una función de estimulación.
+        """Flag to indicate if this rate constant is affected by stimulation.
 
         Return
         ------
         bool
-            Regresará true la velocidad de reacción será afectada por la 
-            estimulación. En caso contrario, regresará false.
+            Returns True if the rate constant is affected by the stimulation. 
+            Otherwise, returns False.
         """
         return self.__calcium_dependent
 
     def get_info(self):
-        """ Imprime el nombre del objeto, el valor númerico de la velocidad de
-        la velocidad de reacción y si es afectada por estimulación externa.
+        """Returns the general information of the RateConstant object, i.e. 
+        its name, the numerical value of the rate constant and whether it 
+        is affected by stimulation.
 
         Return
         ------
         str
-            Información del objeto rate_constant.
+            General information about the RateConstant object.
         """
-        print("-"*50)
-        print(f"NAME:\t\t{self.get_name()}")
-        print(f"RATE CONSTANT:\t{self.get_rate()} s⁻¹")
+        print(f"RATE CONSTANT NAME:\t{self.get_name()}")
+        print(f"RATE CONSTANT VALUE:\t{self.get_rate()} s⁻¹")
         print(f"CALCIUM-DEPENDENT:\t{self.get_calcium_dependent()}")

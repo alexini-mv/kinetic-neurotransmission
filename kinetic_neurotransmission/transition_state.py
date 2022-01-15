@@ -1,78 +1,82 @@
 from .neuromuscular import Synapse
 
 class TransitionState(Synapse):
-    """Se define el paso cinético dentro del módelo cinético vesicular presináptico.
+    """Defines a transition state of the model.
 
     Methods
     -------
-    update(vesicles)
-        Setea el número de vesiculas totales que están en el paso cinético
-    get_vesicles : int
-        Regresa el número de vesiculas que están en este paso cinético
+    update()
+        Updates the number of vesicles that are in the TransitionState object.
+    get_vesicles()
+        Returns the number of vesicles that are in the TransitionState object.
     add_vesicle(vesicles : int)
-        Agrega vesicles a la población de vesiculas actuales del paso cinético
+        Adds vesicles to the current TransitionState vesicle population.
     pop_vesicle(vesicles : int)
-        Disminuye vesicles a la población de vesiculas actuales del paso cinético.
-    get_info
-        Imprime la información general del paso cinético, tal como el nombre y el
-        número de vesiculas actuales.
+        Drop vesicles to the current vesicle population of the 
+        TransitionState object.
+    get_info()
+        Returns the general information of the TransitionState object, such as 
+        its name and the number of current vesicles.
     """
 
     def __init__(self, name):
-        """ Inicializamos el paso cinético del modelo cinético
-        
+        """
         Parameters
         ----------
         name : str
-            Nombre que tendrá el paso cinético
+            TransitionState object name.
         """
         super().__init__(name)
         self.__vesicles = 0
 
     def update(self, vesicles):
-        """Se setean el número total de vesiculas actuales que estarán en el 
-        paso cinético
+        """Updates the total number of vesicles that are in the 
+        TransitionState object.
 
         Parameters
         ----------
         vesicles : int
-            Numero total de vesicular que estarán en el paso cinético
+            Total number of vesicles in the TransitionState object.
         """
         self.__vesicles = vesicles
 
     def get_vesicles(self):
-        """
+        """ Returns the number of current vesicles that are in the 
+        TransitionState object.
+
         Returns
         -------
         int
-            Número de vesiculas actuales en el paso cinético
+            Number of vesicles in the TransitionState object.
         """
         return self.__vesicles
 
     def add_vesicle(self, vesicles):
-        """
+        """Adds vesicles to the current TransitionState vesicle population.
+
         Parameters
         ----------
         vesicles : int
-            Número de vesiculas que se agregaran al total de vesiculas en el paso cinético
+            Number of vesicles to be added.
         """
         self.__vesicles += vesicles
 
     def pop_vesicle(self, vesicles):
-        """
+        """ Remove vesicular from the TransitionState object.
+
         Parameters
         ----------
         vesicles : int
-            Número de vesiculas que se restaran al total de vesiculas en el paso cinético
+            Number of vesicles to be removed.
         """
         self.__vesicles -= vesicles
 
     def get_info(self):
-        """Imprime información del objeto TransitionState.
+        """Returns the general information of the TransitionState object.
         
         Return
         ------
         str
-            Información de los parametros definidos del objeto TransitionState.
+            Name of the TransitionState object and its number of vesicles.
         """
         print(f"{self.get_name()}\t:\t{self.get_vesicles()}")
