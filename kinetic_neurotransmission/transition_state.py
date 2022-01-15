@@ -1,82 +1,82 @@
 from .neuromuscular import Synapse
 
 class TransitionState(Synapse):
-    """Define el transition state dentro del modelo.
+    """Defines a transition state of the model.
 
     Methods
     -------
     update()
-        Actualiza el número de vesiculas que están en el TransitionState.
+        Updates the number of vesicles that are in the TransitionState object.
     get_vesicles()
-        Regresa el número de vesiculas que están en el TransitionState.
+        Returns the number of vesicles that are in the TransitionState object.
     add_vesicle(vesicles : int)
-        Agrega vesicles a la población de vesiculas actuales del TransitionState.
+        Adds vesicles to the current TransitionState vesicle population.
     pop_vesicle(vesicles : int)
-        Disminuye vesicles a la población de vesiculas actuales del TransitionState.
+        Drop vesicles to the current vesicle population of the 
+        TransitionState object.
     get_info()
-        Imprime la información general del TransitionState object, tal como su 
-        nombre y el número de vesiculas actuales.
+        Returns the general information of the TransitionState object, such as 
+        its name and the number of current vesicles.
     """
 
     def __init__(self, name):
-        """ Inicializamos el transition state.
-        
+        """
         Parameters
         ----------
         name : str
-            Nombre del TransitionState object.
+            TransitionState object name.
         """
         super().__init__(name)
         self.__vesicles = 0
 
     def update(self, vesicles):
-        """Se actualiza el número total de vesiculas que estarán en el 
-        TransitionState.
+        """Updates the total number of vesicles that are in the 
+        TransitionState object.
 
         Parameters
         ----------
         vesicles : int
-            Numero total de vesiculas en TransitionState.
+            Total number of vesicles in the TransitionState object.
         """
         self.__vesicles = vesicles
 
     def get_vesicles(self):
-        """ Regresa el número de vesiculas actuales que están en el TransitionState.
+        """ Returns the number of current vesicles that are in the 
+        TransitionState object.
+
         Returns
         -------
         int
-            Número de vesiculas en el TransitionState object.
+            Number of vesicles in the TransitionState object.
         """
         return self.__vesicles
 
     def add_vesicle(self, vesicles):
-        """ Agrega vesiculas dentro del TransitionState object.
+        """Adds vesicles to the current TransitionState vesicle population.
 
         Parameters
         ----------
         vesicles : int
-            Número de vesiculas que se agregaran al total de vesiculas en el 
-            TransitionState object.
+            Number of vesicles to be added.
         """
         self.__vesicles += vesicles
 
     def pop_vesicle(self, vesicles):
-        """ Quita vesicular del TransitionState object.
+        """ Remove vesicular from the TransitionState object.
 
         Parameters
         ----------
         vesicles : int
-            Número de vesiculas que se restaran al total de vesiculas en el 
-            TransitionState.
+            Number of vesicles to be removed.
         """
         self.__vesicles -= vesicles
 
     def get_info(self):
-        """Imprime información general del objeto TransitionState.
+        """Returns the general information of the TransitionState object.
         
         Return
         ------
         str
-            Información de los attributos definidos del objeto TransitionState.
+            Name of the TransitionState object and its number of vesicles.
         """
         print(f"{self.get_name()}\t:\t{self.get_vesicles()}")

@@ -1,38 +1,38 @@
 from .neuromuscular import Synapse
 
 class Transition(Synapse):
-    """Define una transición entre dos transition states.
+    """Defines a transition between two transition states.
     
     Methods
     -------
-    get_rate_constant()
-        Regresa el objeto RateConstant asociado la Transition.
     get_origin()
-        Regresa un diccionario donde está definido el nombre del TransitionState
-        de origen, y el número de vesiculas que implicadas en la transition.
+        Returns a dictionary with the name of the source TransitionState object, 
+        and the number of vesicles involved in the transition.
     get_destination()
-        Regresa un diccionario donde está definido el nombre del TransitionState
-        de destino, y el número de vesiculas implicada en la transition.
+        Returns a dictionary with the name of the destination TransitionState
+        object, and the number of vesicles involved in the transition.
+    get_rate_constant()
+        Returns the RateConstant object associated with this Transition object.
     get_info()
-        Imprime la información general del objeto Transition. Es decir, 
-        nombre, el nombre y el valor del RateConstant object asociado, una 
-        bandera que indica si el Transition object es calcium-dependent, así como
-        los TransitionState de origen y de destino implicados en el Transition.
+        Returns the general information of the Transition object, i.e., its name, 
+        the name and value of the associated RateConstant object, a flag 
+        indicating whether the Transition object is calcium-dependent, as well 
+        as the source and destination TransitionState involved in the Transition.
     """
     def __init__(self, name, rate_constant, origin={}, destination={}):
         """
         Parameters
         ----------
         name : str
-            Nombre con el cual se identificará la Transition.
+            Transition object name.
         rate_constant : RateConstant object
-            Objeto de la clase RateConstant asociado a la Transition.
+            RateConstant object associated to the Transition object.
         origin : dict
-            Diccionario con el nombre del TransitionState de origen de el 
-            número de vesiculas implicadas en la Transition.
+            Dictionary with the name of the source TransitionState, and 
+            the number of vesicles involved in the transition.
         destination : dict
-            Diccionario con el nombre del TransitionState de destino de el 
-            número de vesiculas implicadas en la Transition.
+            Dictionary with the name of the destination TransitionState, and 
+            the number of vesicles involved in the transition.
         """
         super().__init__(name)
         self.__rate = rate_constant
@@ -40,7 +40,7 @@ class Transition(Synapse):
         self.__destination = destination
 
     def get_rate_constant(self):
-        """ Regresa el objeto RateConstant asociado a la Transition.
+        """Returns the RateConstant object associated with this Transition.
 
         Return
         ------
@@ -49,39 +49,39 @@ class Transition(Synapse):
         return self.__rate 
 
     def get_origin(self):
-        """ Regresa la información de TransitionState origen y el número de 
-        vesiculas que implicadas en la Transition.
+        """Returns the source TransitionState information and the number of 
+        vesicles involved in the Transition. 
 
         Return
         ------
         dict
-            Incluye la información de nombre del TransitionState origen de la
-            reacción y el número de vesiculas implicadas.
+            It includes the name information of the TransitionState object 
+            source of the transition and the number of vesicles involved.
         """
         return self.__origin
 
     def get_destination(self):
-        """ Regresa la información de TransitionState destino y el número de 
-        vesiculas que implicadas en la Transition.
+        """Returns the destination TransitionState object information and 
+        the number of vesicles involved in the Transition.
 
         Return
         ------
         dict
-            Incluye la información de nombre del TransitionState destino de la
-            reacción y el número de vesiculas implicadas.
+            It includes the name information of the TransitionState object 
+            target of the transition and the number of vesicles involved.
         """
         return self.__destination
 
     def get_info(self):
-        """ Imprime la información del objeto Transition.
+        """Returns the general information of the Transition object.
 
         Return
         ------
         str
-            Imprime el nombre del objeto Transition, el nombre del objeto 
-            RateConstant asociado, así como su valor númerico y si es calcium-
-            dependent. Igualmente, imprime la información del TransitionState 
-            de origen y destino.
+            Prints the name of the Transition object, the name of the 
+            associated RateConstant object, as well as its numeric value and 
+            whether it is calcium-dependent. It also prints the source and 
+            destination TransitionState objects information.
         """
         print("-"*52)
         print(f"NAME:\t\t{self.get_name()}")
