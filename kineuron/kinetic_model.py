@@ -233,9 +233,8 @@ class KineticModel(Synapse):
             destination = list(transition.get_destination().keys())[0]
             label = transition.get_rate_constant().get_name()
             
-            if transition.get_rate_constant().get_stimulation():
+            if transition.get_rate_constant().get_calcium_dependent():
                 label = label + "*"
 
             f.edge(origin, destination, label=label)
         return f
-        #f.view()
