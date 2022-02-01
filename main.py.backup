@@ -77,5 +77,5 @@ print("Running the experiment:")
 
 experiment.run(repeat=1)
 results = experiment.get_results(mean=True)
-# results.to_csv("experimento.csv", index=True)
+results.to_csv("experimento.csv", index=True)
 
