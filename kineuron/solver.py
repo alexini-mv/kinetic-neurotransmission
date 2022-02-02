@@ -24,8 +24,8 @@ class Solver:
         simulation.
     """
     def __init__(self, model, stimulation):
-        """Inicializa el objeto Solver, con el Model object previamente 
-        definido y Stimulation object.
+        """Initializes the Solver object, with the previously defined Model 
+        object and Stimulation object.
 
         Parameters
         ----------
