@@ -42,7 +42,7 @@ To use the graph display functions of the model, it is necessary to install the 
 
 You are ready to use our package.
 
-## Usage example
+## Usage Example
 
 ### Creating a Model
 
@@ -219,9 +219,13 @@ Email: al.martinez.valencia@gmail.com
 ## Citation
 If you use our code for your research or scientific publication, we kindly ask you to cite our work as follows:
 
-* Martínez-Valencia A., Ramírez-Santiago G. and De-Miguel F.F. (2022) _Dynamics of Neuromuscular Transmission Reproduced by Calcium-Dependent and Reversible Serial Transitions in the Vesicle Fusion Complex_. Front. Synaptic Neurosci. 13:785361. doi: [10.3389/fnsyn.2021.785361](https://www.frontiersin.org/articles/10.3389/fnsyn.2021.785361)
+* Martínez-Valencia A., Ramírez-Santiago G. and De-Miguel F.F. (2022) _Dynamics of Neuromuscular Transmission Reproduced by Calcium-Dependent and Reversible Serial Transitions in the Vesicle Fusion Complex_. Front. Synaptic Neurosci. 13:785361. DOI: [10.3389/fnsyn.2021.785361](https://www.frontiersin.org/articles/10.3389/fnsyn.2021.785361)
 
 
 ## License
 
 Distributed under the GNU General Public License. See ``LICENSE`` for more information.
+
+## Interesting Links
+
+- Perkel, Jeffrey M. (2022) _How to fix your scientific coding errors_. Nature 602, 172-173. DOI: [10.1038/d41586-022-00217-0](https://doi.org/10.1038/d41586-022-00217-0)
