@@ -105,7 +105,7 @@ protocol.plot(t)
 ``` 
 
 <p align="center">
-<img src="https://raw.githubusercontent.com/alexini-mv/kinetic-neurotransmission/develop/doc/_static/protocol.png" alt="Stimulation protocol">
+<img src="https://raw.githubusercontent.com/alexini-mv/kinetic-neurotransmission/develop/doc/static/protocol.png" alt="Stimulation protocol">
 </p>
 
 
@@ -153,7 +153,7 @@ graph.view()
 ```
 
 <p align="center">
-<img src="https://raw.githubusercontent.com/alexini-mv/kinetic-neurotransmission/develop/doc/_static/graph_model.png" alt="Graph Model">
+<img src="https://raw.githubusercontent.com/alexini-mv/kinetic-neurotransmission/develop/doc/static/graph_model.png" alt="Graph Model">
 </p>
 
 
