@@ -12,7 +12,7 @@ KiNeuron is an open source implementation of our mechanistic kinetic model of ne
 KiNeuron is:
 
 - **Simple** -- It is possible to simulate a new kinetic model with a few lines of code  to free you to focus on the parts of the problem that really matter.
-- **Flexible** -- It is possible to customize the kinetic model by changing the number of transition states, the kinetic transitions between states, as well as the rate constants. In addition, Kineuron allows the addition of stimulation.
+- **Flexible** -- It is possible to customize the kinetic model by changing the number of transition states, the kinetic transitions between states, as well as the rate constants. In addition, KiNeuron allows the addition of stimulation.
 
 ---
 

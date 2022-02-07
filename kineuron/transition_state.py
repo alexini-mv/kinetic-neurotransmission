@@ -29,17 +29,6 @@ class TransitionState(Synapse):
         super().__init__(name)
         self.__vesicles = 0
 
-    def update(self, vesicles):
-        """Updates the total number of vesicles that are in the 
-        TransitionState object.
-
-        Parameters
-        ----------
-        vesicles : int
-            Total number of vesicles in the TransitionState object.
-        """
-        self.__vesicles = vesicles
-
     def get_vesicles(self):
         """ Returns the number of current vesicles that are in the 
         TransitionState object.
@@ -50,6 +39,17 @@ class TransitionState(Synapse):
             Number of vesicles in the TransitionState object.
         """
         return self.__vesicles
+
+    def update(self, vesicles):
+        """Updates the total number of vesicles that are in the 
+        TransitionState object.
+
+        Parameters
+        ----------
+        vesicles : int
+            Total number of vesicles in the TransitionState object.
+        """
+        self.__vesicles = vesicles
 
     def add_vesicle(self, vesicles):
         """Adds vesicles to the current TransitionState vesicle population.
