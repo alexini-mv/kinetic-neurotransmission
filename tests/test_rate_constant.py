@@ -1,10 +1,15 @@
 import unittest
+
 from kineuron import RateConstant
+
 
 class TestRateConstant(unittest.TestCase):
 
     def setUp(self) -> None:
-        self.rate_constant = RateConstant("alpha", value=1.5, calcium_dependent=True)
+        self.rate_constant = RateConstant(name="alpha",
+                                          value=1.5,
+                                          calcium_dependent=True
+                                          )
 
     def test_get_name(self) -> None:
         self.assertEqual(self.rate_constant.get_name(), "alpha")

@@ -1,5 +1,7 @@
 import unittest
+
 from kineuron import TransitionState
+
 
 class TestTransitionState(unittest.TestCase):
 
