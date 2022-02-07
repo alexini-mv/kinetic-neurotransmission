@@ -1,5 +1,6 @@
 from .neuromuscular import Synapse
 
+
 class RateConstant(Synapse):
     """Defines the object that will store the rate constant information 
     associated to each Transition object.
@@ -16,6 +17,7 @@ class RateConstant(Synapse):
         RateConstant, its numerical value and whether it is affected by 
         stimulation.
     """
+
     def __init__(self, name, value, calcium_dependent=False):
         """
         Parameters
@@ -31,7 +33,7 @@ class RateConstant(Synapse):
         super().__init__(name)
         self.__rate = value
         self.__calcium_dependent = calcium_dependent
-        
+
     def get_rate(self):
         """Returns the numerical value of the rate constant.
 

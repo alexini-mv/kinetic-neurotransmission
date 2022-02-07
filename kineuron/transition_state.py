@@ -1,5 +1,6 @@
 from .neuromuscular import Synapse
 
+
 class TransitionState(Synapse):
     """Defines a transition state of the model.
 
@@ -73,7 +74,7 @@ class TransitionState(Synapse):
 
     def get_info(self):
         """Returns the general information of the TransitionState object.
-        
+
         Return
         ------
         str

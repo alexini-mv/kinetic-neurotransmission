@@ -1,5 +1,7 @@
 from graphviz import Digraph
+
 from .neuromuscular import Synapse
+
 
 class KineticModel(Synapse):
     """Defines the kinetic model for modeling vesicle maturation transitions 
@@ -75,7 +77,7 @@ class KineticModel(Synapse):
 
     def __dict_items(self, list_items):
         """Auxiliary function to convert a list of items to a dictionary.
-        
+
         Parameters
         ----------
         list_items : list
@@ -117,10 +119,10 @@ class KineticModel(Synapse):
             List of Transition objects.
         """
         self.__transitions = self.__dict_items(transitions)
-    
+
     def get_vesicles(self):
         """Returns the total number of vesicles simulated in the model.
-        
+
         Return
         ------
         int
@@ -220,7 +222,7 @@ class KineticModel(Synapse):
         the names of the TransitionsState, the transitions between them, and the 
         value of their corresponding rate constants.
         """
-        f = Digraph('Neuromuscular Synapse', 
+        f = Digraph('Neuromuscular Synapse',
                     filename='graph_model',
                     node_attr={'color': 'lightblue2', 'style': 'filled'}
                     )
@@ -232,7 +234,7 @@ class KineticModel(Synapse):
             origin = list(transition.get_origin().keys())[0]
             destination = list(transition.get_destination().keys())[0]
             label = transition.get_rate_constant().get_name()
-            
+
             if transition.get_rate_constant().get_calcium_dependent():
                 label = label + "*"
 

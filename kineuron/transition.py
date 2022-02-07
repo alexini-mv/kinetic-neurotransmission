@@ -1,8 +1,9 @@
 from .neuromuscular import Synapse
 
+
 class Transition(Synapse):
     """Defines a transition between two transition states.
-    
+
     Methods
     -------
     get_origin()
@@ -19,6 +20,7 @@ class Transition(Synapse):
         indicating whether the Transition object is calcium-dependent, as well 
         as the source and destination TransitionState involved in the Transition.
     """
+
     def __init__(self, name, rate_constant, origin={}, destination={}):
         """
         Parameters
@@ -46,7 +48,7 @@ class Transition(Synapse):
         ------
         RateConstant object
         """
-        return self.__rate 
+        return self.__rate
 
     def get_origin(self):
         """Returns the source TransitionState information and the number of 
@@ -88,4 +90,3 @@ class Transition(Synapse):
         self.__rate.get_info()
         print(f"ORIGIN:\t\t{self.__origin}")
         print(f"DESTINATION:\t{self.__destination}")
-
