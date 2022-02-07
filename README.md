@@ -229,4 +229,5 @@ Distributed under the GNU General Public License. See ``LICENSE`` for more infor
 ## Interesting Links
 
 - Perkel, Jeffrey M. (2022) _How to fix your scientific coding errors_. Nature 602, 172-173. DOI: [10.1038/d41586-022-00217-0](https://doi.org/10.1038/d41586-022-00217-0).
-- Pylint, a tool that checks for errors in Python code. [Tutorials and documentation](https://pylint.pycqa.org/en/latest/index.html).
+- **Pylint**, a tool that checks for errors in Python code. [Tutorials and documentation](https://pylint.pycqa.org/en/latest/index.html).
+- **Autopep8**, a package automatically formats Python code to conform to the PEP 8 style guide. [Documentation](https://github.com/hhatto/autopep8).
