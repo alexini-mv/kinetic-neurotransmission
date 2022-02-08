@@ -1,7 +1,7 @@
 import math
 
 import matplotlib.pyplot as plt
-from numpy import vectorize
+import numpy as np
 
 from .neuromuscular import Synapse
 
@@ -24,9 +24,11 @@ class Stimulation(Synapse):
             each stimulus, etc.
     """
 
-    def __init__(self, time_start_stimulation, conditional_stimuli, period,
-                 tau_stimulus, intensity_stimulus, time_wait_test,
-                 type_stimulus='exponential_decay', name="Stimulation Protocol"):
+    def __init__(self, time_start_stimulation: float = None,
+                 conditional_stimuli: int = None, period: float = None,
+                 tau_stimulus: float = None, intensity_stimulus: float = None,
+                 time_wait_test: float = None, type_stimulus: str = 'exponential_decay',
+                 name: str = "Stimulation Protocol"):
         """
         Parameters
         ----------
@@ -48,16 +50,18 @@ class Stimulation(Synapse):
                 the test stimulus.
         type_stimulus : str, opcional
                 Profile of each individual stimulus. By default, the parameter 
-                value is 'exponential_delay' which corresponds to a stimulus with 
-                an instantaneous rise followed by an exponential decay.
+                value is 'exponential_delay' which corresponds to a stimulus 
+                with an instantaneous rise followed by an exponential decay.
         name : str, optional
                 Stimulation protocol name.
         """
 
         super().__init__(name)
 
-        assert type_stimulus == 'exponential_decay', \
-            f"The object '{self.__class__.__name__}' no accept '{type_stimulus}' argument of type_stimuli."
+        message = f"The '{self.__class__.__name__}' object does not accept" + \
+            f" '{type_stimulus}' as a valid value of 'type_stimulus'."
+
+        assert type_stimulus == 'exponential_decay', message
 
         epsilon = 0.005
         self.__conditional_stimuli = conditional_stimuli
@@ -140,9 +144,9 @@ class Stimulation(Synapse):
         ylabel : str, optional
                 Name of the y-axis label of the graph. Default 'Intensity'.
         """
-        y = vectorize(self.stimuli)(t)
+        y = np.vectorize(self.stimuli)(t)
         plt.plot(t, y)
         plt.title(self.get_name())
         plt.xlabel(xlabel)
         plt.ylabel(ylabel)
-        plt.show()
+        # plt.show()
