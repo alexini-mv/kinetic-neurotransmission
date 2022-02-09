@@ -217,12 +217,12 @@ class KineticModel(Synapse):
         """
         return self.__resting_state
 
-    def get_graph(self):
+    def get_graph(self) -> Digraph:
         """Generates a graph with the model information, i.e., the model name, 
         the names of the TransitionsState, the transitions between them, and the 
         value of their corresponding rate constants.
         """
-        f = Digraph('Neuromuscular Synapse',
+        f = Digraph('Kinetic Model of Neuromuscular Transmission',
                     filename='graph_model',
                     node_attr={'color': 'lightblue2', 'style': 'filled'}
                     )
@@ -239,4 +239,5 @@ class KineticModel(Synapse):
                 label = label + "*"
 
             f.edge(origin, destination, label=label)
+            
         return f

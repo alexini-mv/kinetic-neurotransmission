@@ -149,4 +149,4 @@ class Stimulation(Synapse):
         plt.title(self.get_name())
         plt.xlabel(xlabel)
         plt.ylabel(ylabel)
-        # plt.show()
+        plt.show()
