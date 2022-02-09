@@ -32,7 +32,8 @@ class TestKineticModel(unittest.TestCase):
                          )
         self.list_transitions = [tr1, tr2]
         self.model.add_transitions(self.list_transitions)
-
+        self.model.init()
+        
     def test_get_name(self) -> None:
         self.assertEqual(self.model.get_name(), "my-model")
 

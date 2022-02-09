@@ -1,9 +1,9 @@
 #!/usr/bin/python3
-from numpy import arange
 import matplotlib.pyplot as plt
+import numpy as np
 
-from kineuron import KineticModel, TransitionState, Transition
-from kineuron import RateConstant, Stimulation, Solver
+from kineuron import (KineticModel, RateConstant, Solver, Stimulation,
+                      Transition, TransitionState)
 
 # Define simulation parameters
 
@@ -15,7 +15,8 @@ vesicles = 10000
 
 # Instantiate the model objects
 
-model = KineticModel(name='Kinetic Neuromuscular Transmission', vesicles=vesicles)
+model = KineticModel(
+    name='Kinetic Neuromuscular Transmission', vesicles=vesicles)
 
 docked = TransitionState(name='Docked')
 pprimed = TransitionState(name='pPrimed')
@@ -32,12 +33,18 @@ r_rho = RateConstant(name="ρ", value=rho)
 model.add_rate_constants([r_alpha, r_beta, r_rho])
 
 
-tr1 = Transition(name='Transition 1', rate_constant=r_alpha, origin={"Docked": 1}, destination={"pPrimed": 1})
-tr2 = Transition(name='Transition 2', rate_constant=r_beta, origin={"pPrimed": 1}, destination={"Docked": 1})
-tr3 = Transition(name='Transition 3', rate_constant=r_alpha, origin={"pPrimed": 1}, destination={"Primed": 1})
-tr4 = Transition(name='Transition 4', rate_constant=r_beta, origin={"Primed": 1}, destination={"pPrimed": 1})
-tr5 = Transition(name='Transition 5', rate_constant=r_alpha, origin={"Primed": 1}, destination={"Fusion": 1})
-tr6 = Transition(name='Transition 6', rate_constant=r_rho, origin={"Fusion": 1}, destination={"Docked": 1})
+tr1 = Transition(name='Transition 1', rate_constant=r_alpha,
+                 origin={"Docked": 1}, destination={"pPrimed": 1})
+tr2 = Transition(name='Transition 2', rate_constant=r_beta,
+                 origin={"pPrimed": 1}, destination={"Docked": 1})
+tr3 = Transition(name='Transition 3', rate_constant=r_alpha,
+                 origin={"pPrimed": 1}, destination={"Primed": 1})
+tr4 = Transition(name='Transition 4', rate_constant=r_beta,
+                 origin={"Primed": 1}, destination={"pPrimed": 1})
+tr5 = Transition(name='Transition 5', rate_constant=r_alpha,
+                 origin={"Primed": 1}, destination={"Fusion": 1})
+tr6 = Transition(name='Transition 6', rate_constant=r_rho,
+                 origin={"Fusion": 1}, destination={"Docked": 1})
 
 model.add_transitions([tr1, tr2, tr3, tr4, tr5, tr6])
 
@@ -47,17 +54,17 @@ model.init()
 model.get_info()
 
 #graph = model.get_graph()
-#graph.view()
+# graph.view()
 
 protocol = Stimulation(
-     conditional_stimuli=3,
-     period=0.03,
-     time_start_stimulation=0.1,
-     tau_stimulus=0.0013,
-     time_wait_test=0.45,
-     intensity_stimulus=500.0)
+    conditional_stimuli=3,
+    period=0.03,
+    time_start_stimulation=0.1,
+    tau_stimulus=0.0013,
+    time_wait_test=0.45,
+    intensity_stimulus=500.0)
 
-# t = arange(0, 1.0, 0.0001)
+# t = np.arange(0, 1.0, 0.0001)
 # protocol.plot(t)
 
 # We look for the resting state of the model.
@@ -78,4 +85,3 @@ print("Running the experiment:")
 experiment.run(repeat=1)
 results = experiment.get_results(mean=True)
 results.to_csv("experimento.csv", index=True)
-

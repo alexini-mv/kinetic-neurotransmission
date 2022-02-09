@@ -49,8 +49,8 @@ You are ready to use our package.
 Create a file `main.py` importing the following classes:
 
 ```python
-from kineuron import KineticModel, TransitionState, Transition
-from kineuron import RateConstant, Stimulation, Solver
+from kineuron import (KineticModel, RateConstant, Solver, Stimulation,
+                      Transition, TransitionState)
 ``` 
 
 After, instance the model objects as follows:

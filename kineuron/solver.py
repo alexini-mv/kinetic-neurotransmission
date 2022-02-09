@@ -72,11 +72,8 @@ class Solver:
             Name of the algorithm to be used. Currently only accepts 'gillespie'.
         """
 
-        if not self.__resting_state:
-            message = "You have not set the resting state of the " + \
-                "model. All simulations will start in a different state " + \
-                "than the resting state."
-            warnings.warn(message, Warning, stacklevel=2)
+        msg = "You have not set the resting state of the model."
+        assert self.__resting_state, msg
 
         if method == 'gillespie':
             self.__gillespie(repeat=repeat, time_end=time_end,
@@ -123,7 +120,7 @@ class Solver:
         else:
             return self.__results
 
-    def get_resting_simulation(self):
+    def get_resting_simulation(self)-> pd.DataFrame:
         """Returns the pandas.DataFrame object with the record of the time 
         evolution during the resting state search.
 
