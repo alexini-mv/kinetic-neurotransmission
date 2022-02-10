@@ -1,8 +1,10 @@
 from graphviz import Digraph
+
 from .neuromuscular import Synapse
 
+
 class KineticModel(Synapse):
-    """Defines the kinetic model for modeling vesicle maturation transitions 
+    """Defines the kinetic model for modeling vesicle maturation transitions
     at the neuromuscular junction.
 
     Attributs
@@ -10,25 +12,25 @@ class KineticModel(Synapse):
     vesicles : int
         Total number of vesicles simulated in the kinetic model.
     transition_states : dict
-        Dictionary with the name and values of the TransitionState objects 
+        Dictionary with the name and values of the TransitionState objects
         defined in the model.
     transitions : dict
-        Dictionary with the name and values of the Transition objects defined 
+        Dictionary with the name and values of the Transition objects defined
         in the model.
     rates : dict
-        Dictionary with the name and values of the RateConstant objects 
+        Dictionary with the name and values of the RateConstant objects
         associated to each Transition object within the model.
 
     Methods
     -------
     add_rate_constants(rates : list)
-        Adds to the model a list of all RateConstant objects of each vesicular 
+        Adds to the model a list of all RateConstant objects of each vesicular
         kinetic transition.
     add_transition_states(transition_states : list)
-        Adds to the model a list of all the TransitionState objects that 
+        Adds to the model a list of all the TransitionState objects that
         constitute the model.
     add_transitions(transitions : list)
-        Adds to the model a list of all the Transitions objects between the 
+        Adds to the model a list of all the Transitions objects between the
         TransitionState objects within the model.
     get_vesicle
         Returns the total number of vesicles that are simulated in the model.
@@ -40,27 +42,27 @@ class KineticModel(Synapse):
         Returns a dictionary with the name and number of instantaneous vesicles
         in each of the TransitionState objects defined in the model.
     get_info
-        Prints the general information of the model, i.e. the name and status 
+        Prints the general information of the model, i.e. the name and status
         of the TransitionState, Transition, RateConstant objects.
     init
-        Initializes the model with the added objects and prepares it to start 
+        Initializes the model with the added objects and prepares it to start
         the simulation.
     set_initial_state(dictionary_state : dict)
-        An initial state of the model is established (name and number of 
-        vesicles in each TransitionState object) from which the model will be 
+        An initial state of the model is established (name and number of
+        vesicles in each TransitionState object) from which the model will be
         simulated.
     set_resting_state
         Sets the model resting state.
     get_resting_state
-        Returns a dictionary with the name and number of vesicles in each 
+        Returns a dictionary with the name and number of vesicles in each
         TransitionState object corresponding to the model resting state.
     get_graph
-        It generates a graph with the model information, i.e. the name of 
+        It generates a graph with the model information, i.e. the name of
         the vesicular kinetic states, transitions and rate constants.
     """
 
     def __init__(self, name="Kinetic Model", vesicles=10000):
-        """The kinetic model is initialized to simulate the transitions 
+        """The kinetic model is initialized to simulate the transitions
         between different vesicular states.
 
         Parameters
@@ -75,7 +77,7 @@ class KineticModel(Synapse):
 
     def __dict_items(self, list_items):
         """Auxiliary function to convert a list of items to a dictionary.
-        
+
         Parameters
         ----------
         list_items : list
@@ -117,10 +119,10 @@ class KineticModel(Synapse):
             List of Transition objects.
         """
         self.__transitions = self.__dict_items(transitions)
-    
+
     def get_vesicles(self):
         """Returns the total number of vesicles simulated in the model.
-        
+
         Return
         ------
         int
@@ -129,7 +131,7 @@ class KineticModel(Synapse):
         return self.__vesicles
 
     def get_transition_states(self):
-        """Returns a dictionary with all the TransitionState objects 
+        """Returns a dictionary with all the TransitionState objects
         defined within the model.
 
         Return
@@ -140,7 +142,7 @@ class KineticModel(Synapse):
         return self.__transition_states
 
     def get_transitions(self):
-        """Returns a dictionary with all the Transition objects 
+        """Returns a dictionary with all the Transition objects
         defined within the model.
 
         Return
@@ -151,34 +153,53 @@ class KineticModel(Synapse):
         return self.__transitions
 
     def get_current_state(self):
-        """Returns the name and number of vesicles in each TransitionState 
+        """Returns the name and number of vesicles in each TransitionState
         in the current state of the model.
 
         Return
         ------
         dict
-            Dictionary with the name of each TransitionState and the number of 
+            Dictionary with the name of each TransitionState and the number of
             vesicles in that state.
         """
         return {name: item.get_vesicles() for name, item in self.__transition_states.items()}
 
-    def get_info(self):
-        """Returns the general information of the model.
+    def __str__(self) -> str:
+        """Builds a string with general information of the model.
 
         Return
         ------
         str
-            Prints the model name, including the total number of vesicles, and 
-            the information of the TransitionState, Transition and RateConstant objects.
+            Name model, the total number of vesicles and the
+            information of the TransitionState, Transition and RateConstant
+            objects.
         """
-        print("="*16 + " MODEL INFORMATION " + "="*16)
-        print(f"MODEL NAME:\t{self.get_name()}")
-        print(f"TOTAL VESICLES:\t{self.__vesicles}")
-        print(f"")
-        print(f"TRANSITION STATES - VESICLES")
+        width = 50
+        left = 30
+
+        msg = [
+            "  MODEL INFORMATION  ".center(width, "="),
+            "MODEL NAME:".ljust(left) + self.get_name(),
+            "TOTAL VESICLES:".ljust(left) + str(self.__vesicles),
+            "",
+            "TRANSITION STATES".ljust(left) + "VESICLES"]
+
         for _, item in {**self.__transition_states, **self.__transitions}.items():
-            item.get_info()
-        print("="*52)
+            msg.append(str(item))
+
+        msg.append("".center(width, "="))
+        return "\n".join(msg)
+
+    def get_info(self) -> None:
+        """Returns the general information of the model.
+
+        Return
+        ------
+            Prints the model name, the total number of vesicles and the 
+            information of the TransitionState, Transition and RateConstant 
+            objects.
+        """
+        print(self.__str__())
 
     def init(self):
         """Initializes the model and prepares it before running any simulation.
@@ -215,12 +236,12 @@ class KineticModel(Synapse):
         """
         return self.__resting_state
 
-    def get_graph(self):
+    def get_graph(self) -> Digraph:
         """Generates a graph with the model information, i.e., the model name, 
         the names of the TransitionsState, the transitions between them, and the 
         value of their corresponding rate constants.
         """
-        f = Digraph('Neuromuscular Synapse', 
+        f = Digraph('Kinetic Model of Neuromuscular Transmission',
                     filename='graph_model',
                     node_attr={'color': 'lightblue2', 'style': 'filled'}
                     )
@@ -232,10 +253,10 @@ class KineticModel(Synapse):
             origin = list(transition.get_origin().keys())[0]
             destination = list(transition.get_destination().keys())[0]
             label = transition.get_rate_constant().get_name()
-            
-            if transition.get_rate_constant().get_stimulation():
+
+            if transition.get_rate_constant().get_calcium_dependent():
                 label = label + "*"
 
             f.edge(origin, destination, label=label)
+
         return f
-        #f.view()

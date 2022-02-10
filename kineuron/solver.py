@@ -1,8 +1,8 @@
 import math
-import warnings
 from random import random
 
-import pandas as pd 
+import pandas as pd
+
 
 class Solver:
     """It defines the solver in charge of performing the time evolution of the 
@@ -23,9 +23,10 @@ class Solver:
         Returns a pandas.DataFrame object with the result of the model 
         simulation.
     """
+
     def __init__(self, model, stimulation):
-        """Inicializa el objeto Solver, con el Model object previamente 
-        definido y Stimulation object.
+        """Initializes the Solver object, with the previously defined Model 
+        object and Stimulation object.
 
         Parameters
         ----------
@@ -48,7 +49,8 @@ class Solver:
             Time that the model will evolve to reach the resting state. The time 
             is measured in seconds.
         """
-        self.__gillespie(repeat=1, time_end=time_end, time_save=0.1, init_basal_state=True)
+        self.__gillespie(repeat=1, time_end=time_end,
+                         time_save=0.1, init_basal_state=True)
         self.__model.set_resting_state()
         self.__resting_state = True
 
@@ -69,18 +71,16 @@ class Solver:
             Name of the algorithm to be used. Currently only accepts 'gillespie'.
         """
 
-        if not self.__resting_state: 
-            message = "You have not set the resting state of the " + \
-            "model. All simulations will start in a different state " + \
-            "than the resting state."
-            warnings.warn(message, Warning, stacklevel=2)
+        msg = "You have not set the resting state of the model."
+        assert self.__resting_state, msg
 
         if method == 'gillespie':
-            self.__gillespie(repeat=repeat, time_end=time_end, time_save=time_save)
+            self.__gillespie(repeat=repeat, time_end=time_end,
+                             time_save=time_save)
         else:
-            message = f"Undefined algorithm in '{self.__class__.__name__}'. " + \
-            "The currently defined algorithm is 'gillespie'."
-            raise Exception(message)
+            message = f"Undefined method in '{self.__class__.__name__}' " + \
+                "object. The currently defined method is 'gillespie'."
+            raise ValueError(message)
 
     def __save_results(self, results: list, init_basal_state: bool):
         """Saves the temporal evolution of the model in a pandas.DataFrame 
@@ -96,11 +96,12 @@ class Solver:
             will run normally.
         """
         if init_basal_state:
-            self.__resting_state_simulation = pd.DataFrame(results).set_index(['run', 'time'])
+            self.__resting_state_simulation = pd.DataFrame(
+                results).set_index(['run', 'time'])
         else:
             self.__results = pd.DataFrame(results).set_index(['run', 'time'])
 
-    def get_results(self, mean: bool=False):
+    def get_results(self, mean: bool = False):
         """Returns the pandas.DataFrame object containing the simulation results.
 
         Parameters
@@ -115,10 +116,10 @@ class Solver:
         """
         if mean:
             return self.__results.mean(level=1)
-        else:       
+        else:
             return self.__results
 
-    def get_resting_simulation(self):
+    def get_resting_simulation(self) -> pd.DataFrame:
         """Returns the pandas.DataFrame object with the record of the time 
         evolution during the resting state search.
 
@@ -127,7 +128,6 @@ class Solver:
         pandas.DataFrame object.
         """
         return self.__resting_state_simulation.mean(level=1)
-
 
     def __gillespie(self, repeat, time_end, time_save, init_basal_state=False):
         """Implementation of Gillespie's Stochastic Algorithm (1976).
@@ -161,46 +161,47 @@ class Solver:
             # -----------------------------------------------------------------
             while True:
                 a = {}
-                #--------------------------------------------------------------
+                # --------------------------------------------------------------
                 # Propensity values are computed for each transition.
-                #--------------------------------------------------------------
+                # --------------------------------------------------------------
                 for name, item in self.__model.get_transitions().items():
                     storage = list(item.get_origin().keys())[0]
-                    dummy_vesicles = self.__model.get_transition_states()[storage].get_vesicles()
-                    
+                    dummy_vesicles = self.__model.get_transition_states()[
+                        storage].get_vesicles()
+
                     if item.get_rate_constant().get_calcium_dependent() and not init_basal_state:
-                        #------------------------------------------------------
+                        # ------------------------------------------------------
                         # The contribution of stimulation is included.
-                        #------------------------------------------------------
+                        # ------------------------------------------------------
                         dummy_rate = item.get_rate_constant().get_rate() + self.__stimulation.stimuli(t)
                     else:
                         dummy_rate = item.get_rate_constant().get_rate()
 
                     a.update({name: dummy_rate * dummy_vesicles})
-                #--------------------------------------------------------------
+                # --------------------------------------------------------------
                 # The total propensity of the system is calculated.
-                #--------------------------------------------------------------
+                # --------------------------------------------------------------
                 a0 = sum(a.values())
-                #--------------------------------------------------------------
+                # --------------------------------------------------------------
                 # The time in which the next transition will occur is calculated.
-                #--------------------------------------------------------------
+                # --------------------------------------------------------------
                 t = t + math.log(1.0 / random()) / a0
-                
+
                 while t >= tsave:
-                    #----------------------------------------------------------
-                    # The record of the instantaneous state of the model is 
+                    # ----------------------------------------------------------
+                    # The record of the instantaneous state of the model is
                     # stored in a temporary list.
-                    #----------------------------------------------------------
-                    dummy = {"run":i, "time": round(tsave, 9)}
+                    # ----------------------------------------------------------
+                    dummy = {"run": i, "time": round(tsave, 9)}
                     dummy.update(self.__model.get_current_state())
                     results.append(dummy)
-                    
+
                     tsave += time_save
 
-                #--------------------------------------------------------------
-                # The next transition to be executed within the model is chosen 
+                # --------------------------------------------------------------
+                # The next transition to be executed within the model is chosen
                 # randomly, considering the total propensity of the system.
-                #--------------------------------------------------------------
+                # --------------------------------------------------------------
                 random_a0 = random() * a0
                 accumulative = 0.0
 
@@ -212,30 +213,34 @@ class Solver:
                         continue
                     else:
                         break
-                
-                #--------------------------------------------------------------
-                # The parameters defined in the selected Transition object are 
+
+                # --------------------------------------------------------------
+                # The parameters defined in the selected Transition object are
                 # obtained.
-                #--------------------------------------------------------------
+                # --------------------------------------------------------------
                 transition = self.__model.get_transitions()[transition_name]
-                origin, vesicles_origin = list(transition.get_origin().items())[0]
-                destination, vesicles_destination = list(transition.get_destination().items())[0]
+                origin, vesicles_origin = list(
+                    transition.get_origin().items())[0]
+                destination, vesicles_destination = list(
+                    transition.get_destination().items())[0]
 
-                #--------------------------------------------------------------
-                # The transition is executed by updating the number of vesicles 
+                # --------------------------------------------------------------
+                # The transition is executed by updating the number of vesicles
                 # in the TransitionState objects involved.
-                #--------------------------------------------------------------
-                self.__model.get_transition_states()[origin].pop_vesicle(vesicles_origin)
-                self.__model.get_transition_states()[destination].add_vesicle(vesicles_destination)
+                # --------------------------------------------------------------
+                self.__model.get_transition_states(
+                )[origin].pop_vesicle(vesicles_origin)
+                self.__model.get_transition_states(
+                )[destination].add_vesicle(vesicles_destination)
 
-                #--------------------------------------------------------------
-                # The previous steps are repeated until the end time of the 
+                # --------------------------------------------------------------
+                # The previous steps are repeated until the end time of the
                 # simulation is reached.
-                #--------------------------------------------------------------
+                # --------------------------------------------------------------
                 if tsave >= time_end:
                     break
 
-        #----------------------------------------------------------------------
+        # ----------------------------------------------------------------------
         # The results of all iterations of the algorithm are saved.
-        #----------------------------------------------------------------------
+        # ----------------------------------------------------------------------
         self.__save_results(results, init_basal_state)

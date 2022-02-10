@@ -1,80 +1,51 @@
-#!/usr/bin/python3
-import time 
+import numpy as np
 
-from numpy import arange
-import matplotlib.pyplot as plt
+from kineuron import (KineticModel, RateConstant, Solver, Stimulation,
+                      Transition, TransitionState)
 
-
-from kinetic_neurotransmission import KineticModel, TransitionState, Transition, RateConstant
-from kinetic_neurotransmission import Stimulation, Solver
-
-# Define simulation parameters
-
-alpha = 1.43
-lamda = 100
-beta = alpha * lamda
-rho = 1.0
-vesicles = 10000
-
-# Instantiate the model objects
-
-model = KineticModel(name='Kinetic Neuromuscular Transmission', vesicles=vesicles)
+model = KineticModel(name='my-model', vesicles=100)
 
 docked = TransitionState(name='Docked')
-pprimed = TransitionState(name='pPrimed')
-primed = TransitionState(name='Primed')
 fusion = TransitionState(name='Fusion')
 
-r_alpha = RateConstant(name="α", value=alpha, calcium_dependent=True)
-r_beta = RateConstant(name="β", value=beta)
-r_rho = RateConstant(name="ρ", value=rho)
+alpha = RateConstant(name="α", value=0.3, calcium_dependent=True)
+beta = RateConstant(name="β", value=15)
 
-tr1 = Transition(name='Transition 1', rate_constant=r_alpha, origin={"Docked": 1}, destination={"pPrimed": 1})
-tr2 = Transition(name='Transition 2', rate_constant=r_beta, origin={"pPrimed": 1}, destination={"Docked": 1})
-tr3 = Transition(name='Transition 3', rate_constant=r_alpha, origin={"pPrimed": 1}, destination={"Primed": 1})
-tr4 = Transition(name='Transition 4', rate_constant=r_beta, origin={"Primed": 1}, destination={"pPrimed": 1})
-tr5 = Transition(name='Transition 5', rate_constant=r_alpha, origin={"Primed": 1}, destination={"Fusion": 1})
-tr6 = Transition(name='Transition 6', rate_constant=r_rho, origin={"Fusion": 1}, destination={"Docked": 1})
+tr1 = Transition(name='Transition 1', rate_constant=alpha,
+                 origin={"Docked": 1}, destination={"Fusion": 1})
+tr2 = Transition(name='Transition 2', rate_constant=beta,
+                 origin={"Fusion": 1}, destination={"Docked": 1})
 
-model.add_transition_states([docked, pprimed, primed, fusion])
-model.add_transitions([tr1, tr2, tr3, tr4, tr5, tr6])
-model.add_rate_constants([r_alpha, r_beta, r_rho])
+model.add_transition_states([docked, fusion])
+model.add_rate_constants([alpha, beta])
+model.add_transitions([tr1, tr2])
 
 model.init()
 
 model.get_info()
 
-#graph = model.get_graph()
-#graph.view()
+# graph = model.get_graph()
+# graph.view()
 
-protocol = Stimulation(
-     conditional_stimuli=3,
-     period=0.03,
-     time_start_stimulation=0.1,
-     tau_stimulus=0.0013,
-     time_wait_test=0.45,
-     intensity_stimulus=500.0)
 
-# t = arange(0, 1.0, 0.0001)
-# protocol.plot(t)
+# protocol = Stimulation(
+#     conditional_stimuli=5,
+#     period=0.03,
+#     time_start_stimulation=0.1,
+#     tau_stimulus=0.0013,
+#     time_wait_test=0.2,
+#     intensity_stimulus=1000.0,
+#     type_stimulus='exponential_decay',
+#     name="Custom Stimulation Protocol")
 
-# We look for the resting state of the model.
+# print(str(protocol))
 
-experiment = Solver(model=model, stimulation=protocol)
-experiment.resting_state(time_end=30.0)
+# # t = np.arange(0, 0.5, 0.0001)
+# # protocol.plot(t)
 
-print("Resting State of Model")
-print(model.get_resting_state())
-print("")
-# experiment.get_resting_simulation().plot()
-# plt.show()
+# experiment = Solver(model=model, stimulation=protocol)
+# experiment.resting_state()
 
-# Run the stochastic simulation.
-
-print("Running the experiment:")
-
-experiment.run(repeat=1)
-resultados = experiment.get_results(mean=True)
-resultados.plot()
-plt.show()
-
+# experiment.run(repeat=1)
+# results = experiment.get_results(mean=True)
+# results.to_csv("results.csv", index=True)

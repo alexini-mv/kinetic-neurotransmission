@@ -1,5 +1,6 @@
 from .neuromuscular import Synapse
 
+
 class RateConstant(Synapse):
     """Defines the object that will store the rate constant information 
     associated to each Transition object.
@@ -16,6 +17,7 @@ class RateConstant(Synapse):
         RateConstant, its numerical value and whether it is affected by 
         stimulation.
     """
+
     def __init__(self, name, value, calcium_dependent=False):
         """
         Parameters
@@ -31,7 +33,7 @@ class RateConstant(Synapse):
         super().__init__(name)
         self.__rate = value
         self.__calcium_dependent = calcium_dependent
-        
+
     def get_rate(self):
         """Returns the numerical value of the rate constant.
 
@@ -53,16 +55,32 @@ class RateConstant(Synapse):
         """
         return self.__calcium_dependent
 
-    def get_info(self):
-        """Returns the general information of the RateConstant object, i.e. 
-        its name, the numerical value of the rate constant and whether it 
-        is affected by stimulation.
+    def __str__(self) -> str:
+        """Builds a string with the general information of the RateConstant 
+        object, i.e. its name, the numerical value of the rate constant and 
+        whether it is affected by stimulation.
 
         Return
         ------
         str
             General information about the RateConstant object.
         """
-        print(f"RATE CONSTANT NAME:\t{self.get_name()}")
-        print(f"RATE CONSTANT VALUE:\t{self.get_rate()} s⁻¹")
-        print(f"CALCIUM-DEPENDENT:\t{self.get_calcium_dependent()}")
+        left = 30
+        msg = [
+            "RATE CONSTANT NAME:".ljust(left) + self.get_name(),
+            "RATE CONSTANT VALUE:".ljust(left) + str(self.get_rate()) + " s⁻¹",
+            "CALCIUM-DEPENDENT:".ljust(left) +
+            str(self.get_calcium_dependent())
+        ]
+        return "\n".join(msg)
+
+    def get_info(self) -> None:
+        """Returns the general information of the RateConstant object, i.e. 
+        its name, the numerical value of the rate constant and whether it 
+        is affected by stimulation.
+
+        Return
+        ------
+            General information about the RateConstant object.
+        """
+        print(self.__str__())

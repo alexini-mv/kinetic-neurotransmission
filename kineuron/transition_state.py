@@ -1,5 +1,6 @@
 from .neuromuscular import Synapse
 
+
 class TransitionState(Synapse):
     """Defines a transition state of the model.
 
@@ -12,10 +13,10 @@ class TransitionState(Synapse):
     add_vesicle(vesicles : int)
         Adds vesicles to the current TransitionState vesicle population.
     pop_vesicle(vesicles : int)
-        Drop vesicles to the current vesicle population of the 
+        Drop vesicles to the current vesicle population of the
         TransitionState object.
     get_info()
-        Returns the general information of the TransitionState object, such as 
+        Returns the general information of the TransitionState object, such as
         its name and the number of current vesicles.
     """
 
@@ -29,19 +30,8 @@ class TransitionState(Synapse):
         super().__init__(name)
         self.__vesicles = 0
 
-    def update(self, vesicles):
-        """Updates the total number of vesicles that are in the 
-        TransitionState object.
-
-        Parameters
-        ----------
-        vesicles : int
-            Total number of vesicles in the TransitionState object.
-        """
-        self.__vesicles = vesicles
-
     def get_vesicles(self):
-        """ Returns the number of current vesicles that are in the 
+        """ Returns the number of current vesicles that are in the
         TransitionState object.
 
         Returns
@@ -50,6 +40,17 @@ class TransitionState(Synapse):
             Number of vesicles in the TransitionState object.
         """
         return self.__vesicles
+
+    def update(self, vesicles):
+        """Updates the total number of vesicles that are in the
+        TransitionState object.
+
+        Parameters
+        ----------
+        vesicles : int
+            Total number of vesicles in the TransitionState object.
+        """
+        self.__vesicles = vesicles
 
     def add_vesicle(self, vesicles):
         """Adds vesicles to the current TransitionState vesicle population.
@@ -71,12 +72,22 @@ class TransitionState(Synapse):
         """
         self.__vesicles -= vesicles
 
-    def get_info(self):
-        """Returns the general information of the TransitionState object.
-        
+    def __str__(self) -> str:
+        """Builds a string with the general information of the TransitionState 
+        object.
+
         Return
         ------
         str
             Name of the TransitionState object and its number of vesicles.
         """
-        print(f"{self.get_name()}\t:\t{self.get_vesicles()}")
+        return f"{self.get_name()}:".ljust(30) + str(self.get_vesicles())
+
+    def get_info(self) -> None:
+        """Returns the general information of the TransitionState object.
+
+        Return
+        ------
+            Name of the TransitionState object and its number of vesicles.
+        """
+        print(self.__str__())
