@@ -4,14 +4,13 @@
 
 ![](https://img.shields.io/static/v1?label=python&message=3.6|3.7|3.8|3.9|3.10&color=informational)
 ![](https://img.shields.io/static/v1?label=pypi%20package&message=v0.0.1&color=%2334D058)
-[![](https://img.shields.io/static/v1?label=DOI&message=10.3389/fnsyn.2021.785361&color=informational)](
-https://www.frontiersin.org/articles/10.3389/fnsyn.2021.785361)
+[![](https://img.shields.io/static/v1?label=DOI&message=10.3389/fnsyn.2021.785361&color=informational)](https://www.frontiersin.org/articles/10.3389/fnsyn.2021.785361)
 
 KiNeuron is an open source implementation of our mechanistic kinetic model of neuromuscular transmission based on sequential maturation transitions in the molecular fusion complex.
 
 KiNeuron is:
 
-- **Simple** -- It is possible to simulate a new kinetic model with a few lines of code  to free you to focus on the parts of the problem that really matter.
+- **Simple** -- It is possible to simulate a new kinetic model with a few lines of code to free you to focus on the parts of the problem that really matter.
 - **Flexible** -- It is possible to customize the kinetic model by changing the number of transition states, the kinetic transitions between states, as well as the rate constants. In addition, KiNeuron allows the addition of stimulation.
 
 ---
@@ -19,6 +18,7 @@ KiNeuron is:
 - **Source Code**: <a href="https://github.com/alexini-mv/kinetic-neurotransmission" target="_blank">https://github.com/alexini-mv/kinetic-neurotransmission</a>
 - **Bug reports**: <a href="https://github.com/alexini-mv/kinetic-neurotransmission/issues" target="_blank">https://github.com/alexini-mv/kinetic-neurotransmission/issues</a>
 - **Citing in your work**: https://www.frontiersin.org/articles/10.3389/fnsyn.2021.785361
+
 ---
 
 ## Requirements
@@ -33,12 +33,11 @@ KiNeuron requires:
 
 To use the graph display functions of the model, it is necessary to install the Graphviz library as described in the follow [documentation](https://graphviz.org/download/).
 
-
 ## Installation
 
-- Clone this project [repository](https://github.com/alexini-mv/kinetic-neurotransmission) to your local workspace. 
+- Clone this project [repository](https://github.com/alexini-mv/kinetic-neurotransmission) to your local workspace.
 - Create a new Python Virtual Environment with either [venv](https://docs.python.org/3/library/venv.html) or [conda](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html).
-- Install the required libraries from the file `requeriments.txt` into your virtual environment. 
+- Install the required libraries from the file `requeriments.txt` into your virtual environment.
 
 You are ready to use our package.
 
@@ -51,7 +50,7 @@ Create a file `main.py` importing the following classes:
 ```python
 from kineuron import (KineticModel, RateConstant, Solver, Stimulation,
                       Transition, TransitionState)
-``` 
+```
 
 After, instance the model objects as follows:
 
@@ -77,6 +76,7 @@ model.add_transitions([tr1, tr2])
 ```
 
 Finally initialize the model:
+
 ```python
 model.init()
 ```
@@ -91,7 +91,7 @@ protocol = Stimulation(
      tau_stimulus=0.0013,
      time_wait_test=0.2,
      intensity_stimulus=100.0,
-     type_stimulus='exponential_decay', 
+     type_stimulus='exponential_decay',
      name="Custom Stimulation Protocol")
 ```
 
@@ -102,24 +102,24 @@ import numpy as np
 
 t = np.arange(0, 0.5, 0.0001)
 protocol.plot(t)
-``` 
+```
 
 <p align="center">
-<img src="https://raw.githubusercontent.com/alexini-mv/kinetic-neurotransmission/develop/docs/_static/protocol.png" alt="Stimulation protocol">
+<img src="https://raw.githubusercontent.com/alexini-mv/kinetic-neurotransmission/main/docs/_static/protocol.png" alt="Stimulation protocol">
 </p>
-
 
 ### Model Information (Optional)
 
 General model information can be obtained as follows:
+
 ```python
 model.get_info()
 ```
+
 and running the file main.py:
 
-
 ```console
-$ python main.py 
+$ python main.py
 
 ==============  MODEL INFORMATION  ===============
 MODEL NAME:                   my-model
@@ -153,9 +153,8 @@ graph.view()
 ```
 
 <p align="center">
-<img src="https://raw.githubusercontent.com/alexini-mv/kinetic-neurotransmission/develop/docs/_static/graph_model.png" alt="Graph Model">
+<img src="https://raw.githubusercontent.com/alexini-mv/kinetic-neurotransmission/main/docs/_static/graph_model.png" alt="Graph Model">
 </p>
-
 
 ### Run It
 
@@ -180,32 +179,40 @@ results.to_csv("results.csv", index=True)
 ```
 
 Finally, the `main.py` file is executed to perform the complete simulation:
+
 ```console
 $ python main.py
 ```
 
 ## Release History
 
-* 0.0.1
-    * Work in progress.
+- 0.0.1
+  - Work in progress.
 
 ## Contributing
+
 - If you are interested in contributing to the project, please follow these guidelines:
 
-     1. Fork it (https://github.com/alexini-mv/kinetic-neurotransmission)
-     2. Create your feature branch 
-     ```console
-     $ git checkout -b feature/fooBar
-     ```
-     3. Commit your changes 
-     ```console
-     $ git commit -am 'Add some fooBar'
-     ```
-     4. Push to the branch 
-     ```console
-     $ git push origin feature/fooBar
-     ```
-     5. Create a new Pull Request
+  1.  Fork it (https://github.com/alexini-mv/kinetic-neurotransmission)
+  2.  Create your feature branch
+
+  ```console
+  $ git checkout -b feature/fooBar
+  ```
+
+  3.  Commit your changes
+
+  ```console
+  $ git commit -am 'Add some fooBar'
+  ```
+
+  4.  Push to the branch
+
+  ```console
+  $ git push origin feature/fooBar
+  ```
+
+  5.  Create a new Pull Request
 
 - If you want to report a bug, please create a new issue [here](https://github.com/alexini-mv/kinetic-neurotransmission/issues) describing the error as clearly as possible.
 
@@ -217,14 +224,14 @@ Author: Alejandro Martínez-Valencia <a href="https://github.com/alexini-mv" tar
 Email: al.martinez.valencia@gmail.com
 
 ## Citation
+
 If you use our code for your research or scientific publication, we kindly ask you to cite our work as follows:
 
-* Martínez-Valencia A., Ramírez-Santiago G. and De-Miguel F.F. (2022) _Dynamics of Neuromuscular Transmission Reproduced by Calcium-Dependent and Reversible Serial Transitions in the Vesicle Fusion Complex_. Front. Synaptic Neurosci. 13:785361. DOI: [10.3389/fnsyn.2021.785361](https://www.frontiersin.org/articles/10.3389/fnsyn.2021.785361)
-
+- Martínez-Valencia A., Ramírez-Santiago G. and De-Miguel F.F. (2022) _Dynamics of Neuromuscular Transmission Reproduced by Calcium-Dependent and Reversible Serial Transitions in the Vesicle Fusion Complex_. Front. Synaptic Neurosci. 13:785361. DOI: [10.3389/fnsyn.2021.785361](https://www.frontiersin.org/articles/10.3389/fnsyn.2021.785361)
 
 ## License
 
-Distributed under the GNU General Public License. See ``LICENSE`` for more information.
+Distributed under the GNU General Public License. See `LICENSE` for more information.
 
 ## Interesting Links
 
