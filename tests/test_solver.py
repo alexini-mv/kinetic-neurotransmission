@@ -62,7 +62,7 @@ class TestSolver(unittest.TestCase):
 
     def test_not_gillespie(self) -> None:
         self.experiment.resting_state()
-        self.assertRaises(Exception, self.experiment.run, method="custom")
+        self.assertRaises(ValueError, self.experiment.run, method="custom")
 
     def test_run(self) -> None:
         random.seed(46)

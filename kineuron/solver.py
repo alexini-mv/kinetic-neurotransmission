@@ -1,5 +1,4 @@
 import math
-import warnings
 from random import random
 
 import pandas as pd
@@ -79,9 +78,9 @@ class Solver:
             self.__gillespie(repeat=repeat, time_end=time_end,
                              time_save=time_save)
         else:
-            message = f"Undefined algorithm in '{self.__class__.__name__}'. " + \
-                "The currently defined algorithm is 'gillespie'."
-            raise Exception(message)
+            message = f"Undefined method in '{self.__class__.__name__}' " + \
+                "object. The currently defined method is 'gillespie'."
+            raise ValueError(message)
 
     def __save_results(self, results: list, init_basal_state: bool):
         """Saves the temporal evolution of the model in a pandas.DataFrame 
@@ -120,7 +119,7 @@ class Solver:
         else:
             return self.__results
 
-    def get_resting_simulation(self)-> pd.DataFrame:
+    def get_resting_simulation(self) -> pd.DataFrame:
         """Returns the pandas.DataFrame object with the record of the time 
         evolution during the resting state search.
 

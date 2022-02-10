@@ -74,19 +74,37 @@ class Transition(Synapse):
         """
         return self.__destination
 
-    def get_info(self):
-        """Returns the general information of the Transition object.
+    def __str__(self) -> str:
+        """Builds a string with the general information of the Transition 
+        object.
 
         Return
         ------
         str
+            Name of the Transition object, the name of the associated 
+            RateConstant object, as well as its numeric value and whether it 
+            is calcium-dependent. It also includes the source and destination 
+            TransitionState objects information.
+        """
+        width = 50
+        left = 30
+        msg = [
+            "".center(width, "-"),
+            "NAME TRANSITION:".ljust(left) + self.get_name(),
+            str(self.__rate),
+            "ORIGIN:".ljust(left) + list(self.__origin.keys())[0],
+            "DESTINATION:".ljust(left) + list(self.__destination.keys())[0]
+        ]
+        return "\n".join(msg)
+
+    def get_info(self) -> None:
+        """Returns the general information of the Transition object.
+
+        Return
+        ------
             Prints the name of the Transition object, the name of the 
             associated RateConstant object, as well as its numeric value and 
             whether it is calcium-dependent. It also prints the source and 
             destination TransitionState objects information.
         """
-        print("-"*52)
-        print(f"NAME:\t\t{self.get_name()}")
-        self.__rate.get_info()
-        print(f"ORIGIN:\t\t{self.__origin}")
-        print(f"DESTINATION:\t{self.__destination}")
+        print(self.__str__())

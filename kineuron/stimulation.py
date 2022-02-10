@@ -75,7 +75,44 @@ class Stimulation(Synapse):
         self.__time_end_stimulation = time_start_stimulation + (conditional_stimuli
                                                                 - 1) * period + epsilon
 
-    def get_info(self):
+    def __str__(self) -> str:
+        """Builds a string with the general information of the stimulation 
+        protocol, i.e. name, type of stimulation, number of conditional 
+        stimuli, initial stimulation time, stimulation end time, period 
+        between conditional stimuli, time constant of duration of each 
+        stimulus, waiting time between the last conditional stimulus and the 
+        test stimulus, intensity of each stimulus.
+
+        Return
+        ------
+        str
+                General information defined within the Stimulation object.
+        """
+        width = 65
+        left = 35
+
+        msg = [
+            "  STIMULATION PROTOCOL OVERVIEW  ".center(width, "="),
+            "* Name:".ljust(left) + self.get_name(),
+            "* Type of stimulus:".ljust(left) + self.__type_stimulus,
+            "* Conditional stimuli:".ljust(left) +
+            str(self.__conditional_stimuli),
+            "* Start time:".ljust(left) +
+            str(self.__time_start_stimulation) + " s",
+            "* Conditional stimuli period:".ljust(
+                left) + str(self.__period) + " s",
+            "* Time constant of the stimuli:".ljust(
+                left) + str(self.__tau_stimulus) + " s",
+            "* Waiting time between last",
+            "  conditional and test stimuli:".ljust(
+                    left) + str(self.__time_wait_test) + " s",
+            "* Stimulus intensity:".ljust(left) +
+            str(self.__intensity_stimulus),
+            "".center(width, "=")
+        ]
+        return "\n".join(msg)
+
+    def get_info(self) -> None:
         """Returns the general information of the stimulation protocol, i.e. 
         name, type of stimulation, number of conditional stimuli, initial 
         stimulation time, stimulation end time, period between conditional 
@@ -85,21 +122,9 @@ class Stimulation(Synapse):
 
         Return
         ------
-        str
                 General information defined within the Stimulation object.
         """
-        print("**** STIMULATION PROTOCOL OVERVIEW ****")
-        print(f"NAME:\t\t{self.get_name()}")
-        print(f"TYPE OF STIMULUS:\t\t\t\t {self.__type_stimulus}")
-        print(
-            f"NUMBER OF CONDITIONAL STIMULI:\t\t {self.__conditional_stimuli}")
-        print(f"STIMULATION START TIME:\t\t {self.__time_start_stimulation}")
-        print(f"STIMULATION END TIME:\t\t {self.__time_end_stimulation}")
-        print(f"PERIOD BETWEEN CONDITIONAL STIMULI:\t\t\t {self.__period}")
-        print(f"TIME CONSTANT OF THE STIMULI:\t\t\t\t {self.__tau_stimulus}")
-        print(
-            f"WAITING TIME BETWEEN LAST CONDITIONAL AND TEST STIMULI:\t {self.__time_wait_test}")
-        print(f"STIMULUS INTENSITY:\t\t\t {self.__intensity_stimulus}")
+        print(self.__str__())
 
     def stimuli(self, t):
         '''Function that models the stimulation protocol.
