@@ -1,11 +1,11 @@
+import os
 import random
 import unittest
 
 import pandas as pd
-from pandas.testing import assert_frame_equal
-
 from kineuron import (KineticModel, RateConstant, Solver, Stimulation,
                       Transition, TransitionState)
+from pandas.testing import assert_frame_equal
 
 
 class TestSolver(unittest.TestCase):
@@ -51,8 +51,11 @@ class TestSolver(unittest.TestCase):
 
     def test_resting_state(self) -> None:
         random.seed(135)
-        actual_resting_state = pd.read_csv("test_resting_state.csv",
-                                           index_col="time")
+        file = os.path.join(os.getcwd(),
+                            "tests",
+                            "__statics",
+                            "test_resting_state.csv")
+        actual_resting_state = pd.read_csv(file, index_col="time")
         self.experiment.resting_state()
 
         self.assertIsInstance(
@@ -66,8 +69,12 @@ class TestSolver(unittest.TestCase):
 
     def test_run(self) -> None:
         random.seed(46)
-        actual_run_results = pd.read_csv("test_run_results.csv",
-                                         index_col="time")
+        file = os.path.join(os.getcwd(),
+                            "tests",
+                            "__statics",
+                            "test_run_results.csv")
+
+        actual_run_results = pd.read_csv(file, index_col="time")
         self.experiment.resting_state()
         self.experiment.run(repeat=10, time_end=1.0, time_save=0.0005)
 
