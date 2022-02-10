@@ -121,28 +121,28 @@ and running the file main.py:
 ```console
 $ python main.py 
 
-================ MODEL INFORMATION ================
-MODEL NAME:	my-model
-TOTAL VESICLES:	100
+==============  MODEL INFORMATION  ===============
+MODEL NAME:                   my-model
+TOTAL VESICLES:               100
 
-TRANSITION STATES - VESICLES
-Docked	:	100
-Fusion	:	0
-----------------------------------------------------
-NAME:		Transition 1
-RATE CONSTANT NAME:	α
-RATE CONSTANT VALUE:	0.3 s⁻¹
-CALCIUM-DEPENDENT:	True
-ORIGIN:		{'Docked': 1}
-DESTINATION:	{'Fusion': 1}
-----------------------------------------------------
-NAME:		Transition 2
-RATE CONSTANT NAME:	β
-RATE CONSTANT VALUE:	15 s⁻¹
-CALCIUM-DEPENDENT:	False
-ORIGIN:		{'Fusion': 1}
-DESTINATION:	{'Docked': 1}
-====================================================
+TRANSITION STATES             VESICLES
+Docked:                       100
+Fusion:                       0
+--------------------------------------------------
+NAME TRANSITION:              Transition 1
+RATE CONSTANT NAME:           α
+RATE CONSTANT VALUE:          0.3 s⁻¹
+CALCIUM-DEPENDENT:            True
+ORIGIN:                       Docked
+DESTINATION:                  Fusion
+--------------------------------------------------
+NAME TRANSITION:              Transition 2
+RATE CONSTANT NAME:           β
+RATE CONSTANT VALUE:          15 s⁻¹
+CALCIUM-DEPENDENT:            False
+ORIGIN:                       Fusion
+DESTINATION:                  Docked
+==================================================
 ```
 
 The following lines allow you to visualize the graph of the model:
