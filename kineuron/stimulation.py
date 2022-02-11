@@ -12,48 +12,49 @@ class Stimulation(Synapse):
 
     Methods
     -------
-    stimuli(t : float)
-            Returns the value of the stimulation function at time t.
-    plot(t : numpy.array)
-            Plots the stimulation profile over a time range defined by 
-            a numpy.array.
-    get_info()
-            Prints the general information of the stimulation protocol, i.e. 
-            the name of the Stimulation object, type of stimulation, duration 
-            of each stimulus, intensity of the stimulus, time period between 
-            each stimulus, etc.
+    stimuli
+        Returns the value of the stimulation function at time t.
+    plot
+        Plots the stimulation profile over a time range defined by 
+        a numpy.array.
+    get_info
+        Prints the general information of the stimulation protocol, i.e. the 
+        name of the kineuron.Stimulation object, type of stimulation, duration 
+        of each stimulus, intensity of the stimulus, time period between 
+        each stimulus, etc.
     """
 
-    def __init__(self, time_start_stimulation: float = None,
+    def __init__(self, name: str = "Stimulation Protocol",
+                 time_start_stimulation: float = None,
                  conditional_stimuli: int = None, period: float = None,
                  tau_stimulus: float = None, intensity_stimulus: float = None,
-                 time_wait_test: float = None, type_stimulus: str = 'exponential_decay',
-                 name: str = "Stimulation Protocol"):
+                 time_wait_test: float = None,
+                 type_stimulus: str = 'exponential_decay') -> None:
         """
         Parameters
         ----------
-        time_start_stimulation : float
-                Time at which the stimulation starts within the time evolution of 
-                the model simulation.
-        conditional_stimuli : int
-                Number of conditional stimuli.
-        period : float
-                Waiting time between each conditional stimulus. In case the 
-                number of conditional number of conditional stimuli is one, the 
-                period is omitted.
-        tau_stimulus: float
-                Time constant of the duration of each individual stimulus.
-        intensity_stimulus : float
-                Intensity each stimulus defined in arbitrary units.
-        time_wait_test : float
-                Waiting time interval between the last conditional stimulus and 
-                the test stimulus.
-        type_stimulus : str, opcional
-                Profile of each individual stimulus. By default, the parameter 
-                value is 'exponential_delay' which corresponds to a stimulus 
-                with an instantaneous rise followed by an exponential decay.
         name : str, optional
-                Stimulation protocol name.
+            Stimulation protocol name.
+        time_start_stimulation : float
+            Time at which the stimulation starts within the time evolution of 
+            the model simulation.
+        conditional_stimuli : int
+            Number of conditional stimuli.
+        period : float
+            Waiting time between each conditional stimulus. In case the 
+            number of conditional number of conditional stimuli is one, the 
+            period is omitted.
+        tau_stimulus: float
+            Time constant of the duration of each individual stimulus.
+        intensity_stimulus : float
+            Intensity each stimulus defined in arbitrary units.
+        time_wait_test : float
+            Waiting time interval between the last conditional stimulus and 
+            the test stimulus.
+        type_stimulus : str, opcional
+            Profile of each individual stimulus. By default, the parameter 
+            value is 'exponential_delay' which corresponds to a stimulus 
+            with an instantaneous rise followed by an exponential decay.
         """
 
         super().__init__(name)
@@ -64,16 +65,15 @@ class Stimulation(Synapse):
         assert type_stimulus == 'exponential_decay', message
 
         epsilon = 0.005
-        self.__conditional_stimuli = conditional_stimuli
-        self.__period = period
-        self.__time_start_stimulation = time_start_stimulation
-        self.__tau_stimulus = tau_stimulus
-        self.__time_wait_test = time_wait_test
-        self.__intensity_stimulus = intensity_stimulus
-        self.__type_stimulus = type_stimulus
-
-        self.__time_end_stimulation = time_start_stimulation + (conditional_stimuli
-                                                                - 1) * period + epsilon
+        self.__time_start_stimulation: float = time_start_stimulation
+        self.__conditional_stimuli: int = conditional_stimuli
+        self.__period: float = period
+        self.__tau_stimulus: float = tau_stimulus
+        self.__time_wait_test: float = time_wait_test
+        self.__intensity_stimulus: float = intensity_stimulus
+        self.__type_stimulus: str = type_stimulus
+        self.__time_end_stimulation: float = time_start_stimulation + \
+            (conditional_stimuli - 1) * period + epsilon
 
     def __str__(self) -> str:
         """Builds a string with the general information of the stimulation 
@@ -86,7 +86,7 @@ class Stimulation(Synapse):
         Return
         ------
         str
-                General information defined within the Stimulation object.
+            General information defined within the Stimulation object.
         """
         width = 65
         left = 35
@@ -122,22 +122,22 @@ class Stimulation(Synapse):
 
         Return
         ------
-                General information defined within the Stimulation object.
+            General information defined within the Stimulation object.
         """
         print(self.__str__())
 
-    def stimuli(self, t):
+    def stimuli(self, t: float) -> float:
         '''Function that models the stimulation protocol.
 
         Parameters
         ----------
         t : float
-                Time variable within the model simulation.
+            Time variable within the model simulation.
 
         Return
         ------
         float
-                The stimulus value at time t.
+            The stimulus value at time t.
         '''
 
         delta_time = t - self.__time_start_stimulation
@@ -157,17 +157,18 @@ class Stimulation(Synapse):
 
         return self.__intensity_stimulus * f
 
-    def plot(self, t, xlabel="Time", ylabel="Intensity"):
+    def plot(self, t: float, xlabel: str = "Time",
+             ylabel: str = "Intensity") -> None:
         """Plots the profile of the stimulation protocol over a range of time.
 
         Parameters
         ----------
         t : numpy.array
-                Array of values where the stimulation protocol profile is plotted.
+            Array of values where the stimulation protocol profile is plotted.
         xlabel : str, optional
-                Name of the x-axis label of the graph. Default 'Time'.
+            Name of the x-axis label of the graph. Default 'Time'.
         ylabel : str, optional
-                Name of the y-axis label of the graph. Default 'Intensity'.
+            Name of the y-axis label of the graph. Default 'Intensity'.
         """
         y = np.vectorize(self.stimuli)(t)
         plt.plot(t, y)

@@ -6,12 +6,12 @@
 ![](https://img.shields.io/static/v1?label=pypi%20package&message=v0.0.1&color=%2334D058)
 [![](https://img.shields.io/static/v1?label=DOI&message=10.3389/fnsyn.2021.785361&color=informational)](https://www.frontiersin.org/articles/10.3389/fnsyn.2021.785361)
 
-KiNeuron is an open source implementation of our mechanistic kinetic model of neuromuscular transmission based on sequential maturation transitions in the molecular fusion complex.
+KiNeuron is an open-source implementation of our mechanistic kinetic model of neuromuscular transmission based on sequential maturation transitions in the molecular fusion complex.
 
 KiNeuron is:
 
-- **Simple** -- It is possible to simulate a new kinetic model with a few lines of code to free you to focus on the parts of the problem that really matter.
-- **Flexible** -- It is possible to customize the kinetic model by changing the number of transition states, the kinetic transitions between states, as well as the rate constants. In addition, KiNeuron allows the addition of stimulation.
+- **Simple** -- It is possible to simulate an alternative kinetic model with a few lines of code. This way, you can focus on the key parts of the problem that really matter.
+- **Flexible** -- It is possible to customize the kinetic model by adjusting the number of transition states, the kinetic transitions between states, as well as the rate constants. Further, KiNeuron allows the addition of a stimulation protocol.
 
 ---
 
@@ -31,7 +31,7 @@ KiNeuron requires:
 - numpy (>= 1.20.1)
 - pandas (>= 1.2.3)
 
-To use the graph display functions of the model, it is necessary to install the Graphviz library as described in the follow [documentation](https://graphviz.org/download/).
+To use the graph display functions of the model, it is necessary to install the Graphviz library as described in follow [documentation](https://graphviz.org/download/).
 
 ## Installation
 
@@ -45,7 +45,7 @@ You are ready to use our package.
 
 ### Creating a Model
 
-Create a file `main.py` importing the following classes:
+Create a file `main.py` and import the following classes:
 
 ```python
 from kineuron import (KineticModel, RateConstant, Solver, Stimulation,
@@ -67,7 +67,7 @@ tr1 = Transition(name='Transition 1', rate_constant=alpha, origin={"Docked": 1},
 tr2 = Transition(name='Transition 2', rate_constant=beta, origin={"Fusion": 1}, destination={"Docked": 1})
 ```
 
-Add all objects to the model as follows:
+Add all objects to the model as follow:
 
 ```python
 model.add_transition_states([docked, fusion])
@@ -75,13 +75,13 @@ model.add_rate_constants([alpha, beta])
 model.add_transitions([tr1, tr2])
 ```
 
-Finally initialize the model:
+Finally, initialize the model:
 
 ```python
 model.init()
 ```
 
-Likewise, a stimulation protocol should be defined (if the experiment requires it) as follows:
+Likewise, a stimulation protocol should be defined (if the experiment expects it) as follows:
 
 ```python
 protocol = Stimulation(
@@ -116,7 +116,7 @@ General model information can be obtained as follows:
 model.get_info()
 ```
 
-and running the file main.py:
+and run the file main.py:
 
 ```console
 $ python main.py
@@ -158,13 +158,13 @@ graph.view()
 
 ### Run It
 
-The Solver object that simulates the time evolution of the model must be instantiated. Here we use a implementation of the [Gillespie Stochastic Algorithm (1977)](https://doi.org/10.1021/j100540a008).
+The Solver object that simulates the time evolution of the model must be instantiated. Here, we use an implementation of the [Gillespie Stochastic Algorithm (1977)](https://doi.org/10.1021/j100540a008).
 
 ```python
 experiment = Solver(model=model, stimulation=protocol)
 ```
 
-Before starting the simulation, be sure to find the _**resting state**_ of the model, from which all experiments will start. This is accomplished as follows:
+Before initiating the simulation, be sure to obtain the _**resting state**_ of the model, from which all repetitions of the experiment are starting. This is achieved as follows:
 
 ```python
 experiment.resting_state()
@@ -225,7 +225,7 @@ Email: al.martinez.valencia@gmail.com
 
 ## Citation
 
-If you use our code for your research or scientific publication, we kindly ask you to cite our work as follows:
+If you use our code for your research or scientific publication, we kindly ask you to refer to our work as follows:
 
 - Martínez-Valencia A., Ramírez-Santiago G. and De-Miguel F.F. (2022) _Dynamics of Neuromuscular Transmission Reproduced by Calcium-Dependent and Reversible Serial Transitions in the Vesicle Fusion Complex_. Front. Synaptic Neurosci. 13:785361. DOI: [10.3389/fnsyn.2021.785361](https://www.frontiersin.org/articles/10.3389/fnsyn.2021.785361)
 

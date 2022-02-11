@@ -1,4 +1,5 @@
 from .neuromuscular import Synapse
+from .rate_constant import RateConstant
 
 
 class Transition(Synapse):
@@ -6,85 +7,92 @@ class Transition(Synapse):
 
     Methods
     -------
-    get_origin()
-        Returns a dictionary with the name of the source TransitionState object, 
-        and the number of vesicles involved in the transition.
-    get_destination()
-        Returns a dictionary with the name of the destination TransitionState
-        object, and the number of vesicles involved in the transition.
-    get_rate_constant()
-        Returns the RateConstant object associated with this Transition object.
-    get_info()
-        Returns the general information of the Transition object, i.e., its name, 
-        the name and value of the associated RateConstant object, a flag 
-        indicating whether the Transition object is calcium-dependent, as well 
-        as the source and destination TransitionState involved in the Transition.
+    get_origin
+        Returns a dictionary with the name of the source 
+        kineuron.TransitionState object and the number of vesicles involved in 
+        the transition.
+    get_destination
+        Returns a dictionary with the name of the destination 
+        kineuron.TransitionState object, and the number of vesicles involved in
+        the transition.
+    get_rate_constant
+        Returns the kineuron.RateConstant object associated with this 
+        kineuron.Transition object.
+    get_info
+        Returns the general information of the kineuron.Transition object, 
+        i.e., its name, the name and value of the associated RateConstant 
+        object, a flag indicating whether the kineuron.Transition object is 
+        calcium-dependent, as well as the source and destination 
+        kineuron.TransitionState involved in this kineuron.Transition.
     """
 
-    def __init__(self, name, rate_constant, origin={}, destination={}):
+    def __init__(self, name: str, rate_constant: RateConstant,
+                 origin: str, destination: str) -> None:
         """
         Parameters
         ----------
         name : str
             Transition object name.
-        rate_constant : RateConstant object
-            RateConstant object associated to the Transition object.
-        origin : dict
-            Dictionary with the name of the source TransitionState, and 
-            the number of vesicles involved in the transition.
-        destination : dict
-            Dictionary with the name of the destination TransitionState, and 
-            the number of vesicles involved in the transition.
+        rate_constant : kineuron.RateConstant object
+            kineuron.RateConstant object associated to the kineuron.Transition 
+            object.
+        origin : str
+            Name of the source kineuron.TransitionState involved in the 
+            transition.
+        destination : str
+            Name of the destination kineuron.TransitionState involved in the 
+            transition.
         """
         super().__init__(name)
-        self.__rate = rate_constant
-        self.__origin = origin
-        self.__destination = destination
+        self.__rate: RateConstant = rate_constant
+        self.__origin: str = origin
+        self.__destination: str = destination
 
-    def get_rate_constant(self):
-        """Returns the RateConstant object associated with this Transition.
+    def get_rate_constant(self) -> RateConstant:
+        """Returns the kineuron.RateConstant object associated with this 
+        kineuron.Transition.
 
         Return
         ------
-        RateConstant object
+        kineuron.RateConstant
         """
         return self.__rate
 
-    def get_origin(self):
-        """Returns the source TransitionState information and the number of 
-        vesicles involved in the Transition. 
-
-        Return
-        ------
-        dict
-            It includes the name information of the TransitionState object 
-            source of the transition and the number of vesicles involved.
-        """
-        return self.__origin
-
-    def get_destination(self):
-        """Returns the destination TransitionState object information and 
-        the number of vesicles involved in the Transition.
-
-        Return
-        ------
-        dict
-            It includes the name information of the TransitionState object 
-            target of the transition and the number of vesicles involved.
-        """
-        return self.__destination
-
-    def __str__(self) -> str:
-        """Builds a string with the general information of the Transition 
-        object.
+    def get_origin(self) -> str:
+        """Returns name of source kineuron.TransitionState involved in this 
+        kineuron.Transition. 
 
         Return
         ------
         str
-            Name of the Transition object, the name of the associated 
-            RateConstant object, as well as its numeric value and whether it 
-            is calcium-dependent. It also includes the source and destination 
-            TransitionState objects information.
+            Name of the kineuron.TransitionState object source of the transition
+            involved.
+        """
+        return self.__origin
+
+    def get_destination(self) -> str:
+        """Returns name of destination kineuron.TransitionState involved in the
+        kineuron.Transition.
+
+        Return
+        ------
+        str
+            Name of the kineuron.TransitionState object target of the transition
+            involved.
+        """
+        return self.__destination
+
+    def __str__(self) -> str:
+        """Builds a string with the general information of the 
+        kineuron.Transition object.
+
+        Return
+        ------
+        str
+            Name of the kineuron.Transition object, the name of the associated
+            kineuron.RateConstant object, as well as its numeric value and 
+            whether it is calcium-dependent. It also includes the source and 
+            destination kineuron.TransitionState objects information.
         """
         width = 50
         left = 30
@@ -92,19 +100,19 @@ class Transition(Synapse):
             "".center(width, "-"),
             "NAME TRANSITION:".ljust(left) + self.get_name(),
             str(self.__rate),
-            "ORIGIN:".ljust(left) + list(self.__origin.keys())[0],
-            "DESTINATION:".ljust(left) + list(self.__destination.keys())[0]
+            "ORIGIN:".ljust(left) + self.__origin,
+            "DESTINATION:".ljust(left) + self.__destination
         ]
         return "\n".join(msg)
 
     def get_info(self) -> None:
-        """Returns the general information of the Transition object.
+        """Returns the general information of the kineuron.Transition object.
 
         Return
         ------
-            Prints the name of the Transition object, the name of the 
-            associated RateConstant object, as well as its numeric value and 
-            whether it is calcium-dependent. It also prints the source and 
-            destination TransitionState objects information.
+            Prints the name of the kineuron.Transition object, the name of the
+            associated kineuron.RateConstant object, as well as its numeric 
+            value and whether it is calcium-dependent. It also prints the 
+            source and destination kineuron.TransitionState objects information.
         """
         print(self.__str__())
