@@ -63,8 +63,14 @@ fusion = TransitionState(name='Fusion')
 alpha = RateConstant(name="α", value=0.3, calcium_dependent=True)
 beta = RateConstant(name="β", value=15)
 
-tr1 = Transition(name='Transition 1', rate_constant=alpha, origin={"Docked": 1}, destination={"Fusion": 1})
-tr2 = Transition(name='Transition 2', rate_constant=beta, origin={"Fusion": 1}, destination={"Docked": 1})
+tr1 = Transition(name='Transition 1', 
+                 rate_constant=alpha,
+                 origin="Docked", 
+                 destination="Fusion")
+tr2 = Transition(name='Transition 2', 
+                 rate_constant=beta,
+                 origin="Fusion", 
+                 destination="Docked")
 ```
 
 Add all objects to the model as follow:
