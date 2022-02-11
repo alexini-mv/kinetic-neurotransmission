@@ -162,7 +162,7 @@ class Solver:
 
             t = 0.0
             tsave = 0.0
-
+            finish = False
             # -----------------------------------------------------------------
             # Starts the Gillespie Stochastic Algorithm loop.
             # -----------------------------------------------------------------
@@ -205,10 +205,9 @@ class Solver:
                 # The record of the instantaneous state of the model is stored
                 # in a temporary list.
                 # -------------------------------------------------------------
-                while t >= tsave:
+                while t >= tsave and tsave <= time_end:
                     dummy = {"run": i, "time": round(tsave, 9)}
                     dummy.update(self.__model.get_current_state())
-
                     results.append(dummy)
 
                     tsave += time_save
