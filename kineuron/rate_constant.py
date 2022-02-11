@@ -3,7 +3,7 @@ from .neuromuscular import Synapse
 
 class RateConstant(Synapse):
     """Defines the object that will store the rate constant information 
-    associated to each Transition object.
+    associated to each kineuron.Transition object.
 
     Methods
     -------
@@ -14,11 +14,11 @@ class RateConstant(Synapse):
         Otherwise, it returns False.
     get_info: str
         Returns the general information of the object, i.e. the name of the 
-        RateConstant, its numerical value and whether it is affected by 
-        stimulation.
+        kineuron.RateConstant, its numerical value and whether it is affected 
+        by stimulation.
     """
 
-    def __init__(self, name, value, calcium_dependent=False):
+    def __init__(self, name: str, value: float, calcium_dependent: bool = False):
         """
         Parameters
         ----------
@@ -31,10 +31,10 @@ class RateConstant(Synapse):
             stimulation. Default is False.
         """
         super().__init__(name)
-        self.__rate = value
-        self.__calcium_dependent = calcium_dependent
+        self.__rate: float = value
+        self.__calcium_dependent: bool = calcium_dependent
 
-    def get_rate(self):
+    def get_rate(self) -> float:
         """Returns the numerical value of the rate constant.
 
         Return
@@ -44,7 +44,7 @@ class RateConstant(Synapse):
         """
         return self.__rate
 
-    def get_calcium_dependent(self):
+    def get_calcium_dependent(self) -> bool:
         """Flag to indicate if this rate constant is affected by stimulation.
 
         Return
@@ -56,14 +56,14 @@ class RateConstant(Synapse):
         return self.__calcium_dependent
 
     def __str__(self) -> str:
-        """Builds a string with the general information of the RateConstant 
-        object, i.e. its name, the numerical value of the rate constant and 
-        whether it is affected by stimulation.
+        """Builds a string with the general information of the 
+        kineuron.RateConstant object, i.e. its name, the numerical value of 
+        the rate constant and whether it is affected by stimulation.
 
         Return
         ------
         str
-            General information about the RateConstant object.
+            General information about the kineuron.RateConstant object.
         """
         left = 30
         msg = [
@@ -75,12 +75,12 @@ class RateConstant(Synapse):
         return "\n".join(msg)
 
     def get_info(self) -> None:
-        """Returns the general information of the RateConstant object, i.e. 
-        its name, the numerical value of the rate constant and whether it 
-        is affected by stimulation.
+        """Returns the general information of the kineuron.RateConstant 
+        object, i.e. its name, the numerical value of the rate constant and 
+        whether it is affected by stimulation.
 
         Return
         ------
-            General information about the RateConstant object.
+            General information about the kineuron.RateConstant object.
         """
         print(self.__str__())

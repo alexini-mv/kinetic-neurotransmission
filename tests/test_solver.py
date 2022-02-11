@@ -22,13 +22,13 @@ class TestSolver(unittest.TestCase):
 
         tr1 = Transition(name='Transition 1',
                          rate_constant=alpha,
-                         origin={"Docked": 1},
-                         destination={"Fusion": 1}
+                         origin="Docked",
+                         destination="Fusion"
                          )
         tr2 = Transition(name='Transition 2',
                          rate_constant=beta,
-                         origin={"Fusion": 1},
-                         destination={"Docked": 1}
+                         origin="Fusion",
+                         destination="Docked"
                          )
         model.add_transitions([tr1, tr2])
         model.init()

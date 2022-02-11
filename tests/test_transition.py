@@ -12,8 +12,8 @@ class TestTransition(unittest.TestCase):
                                      )
         self.transition = Transition(name="Transition 1",
                                      rate_constant=rate_constant,
-                                     origin={"Docker": 1},
-                                     destination={"Fusion": 1}
+                                     origin="Docker",
+                                     destination="Fusion"
                                      )
 
     def test_get_name(self) -> None:
@@ -24,10 +24,12 @@ class TestTransition(unittest.TestCase):
             self.transition.get_rate_constant(), RateConstant)
 
     def test_get_origin(self) -> None:
-        self.assertDictEqual(self.transition.get_origin(), {"Docker": 1})
+        self.assertIsInstance(self.transition.get_origin(), str)
+        self.assertEqual(self.transition.get_origin(), "Docker")
 
     def test_get_destination(self) -> None:
-        self.assertDictEqual(self.transition.get_destination(), {"Fusion": 1})
+        self.assertIsInstance(self.transition.get_destination(), str)
+        self.assertEqual(self.transition.get_destination(), "Fusion")
 
 
 if __name__ == '__main__':
