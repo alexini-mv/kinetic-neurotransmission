@@ -37,7 +37,11 @@ To use the graph display functions of the model, it is necessary to install the 
 
 - Clone this project [repository](https://github.com/alexini-mv/kinetic-neurotransmission) to your local workspace.
 - Create a new Python Virtual Environment with [venv](https://docs.python.org/3/library/venv.html).
-- Install the required libraries from the file `requeriments.txt` into your virtual environment.
+- Install the required libraries from the file `requeriments.txt` into your virtual environment as follow:
+
+```console
+$ pip install -r requeriments.txt
+```
 
 You are ready to use our package.
 
