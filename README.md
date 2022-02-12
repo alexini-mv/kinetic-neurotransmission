@@ -2,7 +2,7 @@
 
 ## KiNeuron: Python implementation of the kinetic model of neuromuscular transmission dynamics.
 
-![](https://img.shields.io/static/v1?label=python&message=3.6|3.7|3.8|3.9|3.10&color=informational)
+![](https://img.shields.io/static/v1?label=python&message=3.8|3.9|3.10&color=informational)
 ![](https://img.shields.io/static/v1?label=pypi%20package&message=v0.0.1&color=%2334D058)
 [![](https://img.shields.io/static/v1?label=DOI&message=10.3389/fnsyn.2021.785361&color=informational)](https://www.frontiersin.org/articles/10.3389/fnsyn.2021.785361)
 
@@ -25,18 +25,18 @@ KiNeuron is:
 
 KiNeuron requires:
 
-- python (>= 3.6)
-- graphviz (>= 0.16)
-- matplotlib (>= 3.3.4)
-- numpy (>= 1.20.1)
-- pandas (>= 1.2.3)
+- python >= 3.8
+- graphviz = 0.19.1
+- matplotlib = 3.5.1
+- numpy = 1.22.2
+- pandas = 1.2.5
 
 To use the graph display functions of the model, it is necessary to install the Graphviz library as described in follow [documentation](https://graphviz.org/download/).
 
 ## Installation
 
 - Clone this project [repository](https://github.com/alexini-mv/kinetic-neurotransmission) to your local workspace.
-- Create a new Python Virtual Environment with either [venv](https://docs.python.org/3/library/venv.html) or [conda](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html).
+- Create a new Python Virtual Environment with [venv](https://docs.python.org/3/library/venv.html).
 - Install the required libraries from the file `requeriments.txt` into your virtual environment.
 
 You are ready to use our package.
