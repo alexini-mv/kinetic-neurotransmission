@@ -1,3 +1,4 @@
+import matplotlib.pyplot as plt
 import numpy as np
 
 from kineuron import (KineticModel, RateConstant, Solver, Stimulation,
@@ -38,13 +39,13 @@ protocol = Stimulation(
     type_stimulus='exponential_decay',
     name="Custom Stimulation Protocol")
 
-# print(str(protocol))
-
 # t = np.arange(0, 0.5, 0.0001)
 # protocol.plot(t)
 experiment = Solver(model=model, stimulation=protocol)
 experiment.resting_state()
 
 experiment.run(repeat=1)
-results = experiment.get_results(mean=True)
+# results = experiment.get_results(mean=True)
+# results.plot()
+# plt.show()
 # results.to_csv("results.csv", index=True)
