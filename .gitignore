@@ -3,3 +3,5 @@
 *.ipynb
 .vscode/
 venv/
+dist/
+*.egg-info/
