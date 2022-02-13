@@ -2,8 +2,9 @@
 
 ## KiNeuron: Python implementation of the kinetic model of neuromuscular transmission dynamics.
 
-![](https://img.shields.io/static/v1?label=python&message=3.8|3.9|3.10&color=informational)
-![](https://img.shields.io/static/v1?label=pypi%20package&message=v0.0.1&color=%2334D058)
+![](https://img.shields.io/static/v1?label=python&message=3.7%20|%203.8%20|%203.9%20|%203.10&color=informational)
+![](https://img.shields.io/static/v1?label=pypi%20package&message=v0.1.0&color=%2334D058)
+![](https://img.shields.io/static/v1?label=test&message=passed&color=%2334D058)
 [![](https://img.shields.io/static/v1?label=DOI&message=10.3389/fnsyn.2021.785361&color=informational)](https://www.frontiersin.org/articles/10.3389/fnsyn.2021.785361)
 
 KiNeuron is an open-source implementation of our mechanistic kinetic model of neuromuscular transmission based on sequential maturation transitions in the molecular fusion complex.
@@ -25,18 +26,18 @@ KiNeuron is:
 
 KiNeuron requires:
 
-- python >= 3.8
-- graphviz = 0.19.1
-- matplotlib = 3.5.1
-- numpy = 1.22.2
-- pandas = 1.2.5
+- python >= 3.7
+- graphviz == 0.19.1
+- matplotlib == 3.5.1
+- numpy == 1.21.5
+- pandas == 1.2.5
 
 To use the graph display functions of the model, it is necessary to install the Graphviz library as described in follow [documentation](https://graphviz.org/download/).
 
 ## Installation
 
 - Clone this project [repository](https://github.com/alexini-mv/kinetic-neurotransmission) to your local workspace.
-- Create a new Python Virtual Environment with [venv](https://docs.python.org/3/library/venv.html).
+- Create a new Python Virtual Environment with [venv](https://docs.python.org/3/library/venv.html) or [conda](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html).
 - Install the required libraries from the file `requeriments.txt` into your virtual environment as follow:
 
 ```console
@@ -67,13 +68,13 @@ fusion = TransitionState(name='Fusion')
 alpha = RateConstant(name="α", value=0.3, calcium_dependent=True)
 beta = RateConstant(name="β", value=15)
 
-tr1 = Transition(name='Transition 1', 
+tr1 = Transition(name='Transition 1',
                  rate_constant=alpha,
-                 origin="Docked", 
+                 origin="Docked",
                  destination="Fusion")
-tr2 = Transition(name='Transition 2', 
+tr2 = Transition(name='Transition 2',
                  rate_constant=beta,
-                 origin="Fusion", 
+                 origin="Fusion",
                  destination="Docked")
 ```
 
@@ -196,6 +197,8 @@ $ python main.py
 
 ## Release History
 
+- 0.1.0
+  - Stable version released.
 - 0.0.1
   - Work in progress.
 
@@ -203,26 +206,26 @@ $ python main.py
 
 - If you are interested in contributing to the project, please follow these guidelines:
 
-  1.  Fork it (https://github.com/alexini-mv/kinetic-neurotransmission)
-  2.  Create your feature branch
+  1.  Fork it (https://github.com/alexini-mv/kinetic-neurotransmission).
+  2.  Create your feature branch:
 
   ```console
   $ git checkout -b feature/fooBar
   ```
 
-  3.  Commit your changes
+  3.  Commit your changes:
 
   ```console
   $ git commit -am 'Add some fooBar'
   ```
 
-  4.  Push to the branch
+  4.  Push to the branch:
 
   ```console
   $ git push origin feature/fooBar
   ```
 
-  5.  Create a new Pull Request
+  5.  Create a new Pull Request.
 
 - If you want to report a bug, please create a new issue [here](https://github.com/alexini-mv/kinetic-neurotransmission/issues) describing the error as clearly as possible.
 
@@ -231,7 +234,7 @@ $ python main.py
 Author: Alejandro Martínez-Valencia <a href="https://github.com/alexini-mv" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/25/25231.png" width="23"></a>
 <a href="https://twitter.com/alexinimv" target="_blank"><img src="https://img.icons8.com/fluency/96/000000/twitter-squared.png" width="25"></a> <a href="https://www.linkedin.com/in/amartinezvalencia/" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" width="22"></a>
 
-Email: al.martinez.valencia@gmail.com
+Email: vaf.ss4@gmail.com
 
 ## Citation
 

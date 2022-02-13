@@ -2,4 +2,4 @@
 *.pyc
 *.ipynb
 .vscode/
-env/
+venv/
