@@ -1,5 +1,7 @@
-*.pyc
-*.ipynb
 .vscode/
-env/
-
+venv/
+dist/
+*.egg-info/
+*.backup
+*.ipynb
+*.pyc

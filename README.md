@@ -2,8 +2,9 @@
 
 ## KiNeuron: Python implementation of the kinetic model of neuromuscular transmission dynamics.
 
-![](https://img.shields.io/static/v1?label=python&message=3.6|3.7|3.8|3.9|3.10&color=informational)
-![](https://img.shields.io/static/v1?label=pypi%20package&message=v0.0.1&color=%2334D058)
+![](https://img.shields.io/static/v1?label=python&message=3.6%20|%203.7%20|%203.8%20|%203.9%20|%203.10&color=informational)
+![](https://img.shields.io/static/v1?label=pypi%20package&message=v0.1.0&color=%2334D058)
+![](https://img.shields.io/static/v1?label=test&message=passed&color=%2334D058)
 [![](https://img.shields.io/static/v1?label=DOI&message=10.3389/fnsyn.2021.785361&color=informational)](https://www.frontiersin.org/articles/10.3389/fnsyn.2021.785361)
 
 KiNeuron is an open-source implementation of our mechanistic kinetic model of neuromuscular transmission based on sequential maturation transitions in the molecular fusion complex.
@@ -25,21 +26,45 @@ KiNeuron is:
 
 KiNeuron requires:
 
-- python (>= 3.6)
-- graphviz (>= 0.16)
-- matplotlib (>= 3.3.4)
-- numpy (>= 1.20.1)
-- pandas (>= 1.2.3)
+- python >= 3.6
+- graphviz >= 0.19.1
+- matplotlib >= 3.3.4
+- numpy >= 1.19.5
+- pandas >= 1.1.5, <1.3.0
 
 To use the graph display functions of the model, it is necessary to install the Graphviz library as described in follow [documentation](https://graphviz.org/download/).
 
 ## Installation
 
-- Clone this project [repository](https://github.com/alexini-mv/kinetic-neurotransmission) to your local workspace.
-- Create a new Python Virtual Environment with either [venv](https://docs.python.org/3/library/venv.html) or [conda](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html).
-- Install the required libraries from the file `requeriments.txt` into your virtual environment.
+There are two ways to install KiNeuron:
 
-You are ready to use our package.
+1. Via PyPI repository (recommended):
+
+    - In your local workspace, create a new Python Virtual Environment with [venv](https://docs.python.org/3/library/venv.html) or [conda](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html).
+    - Install KiNeuron as follow:
+
+    ```console
+    $ python -m pip install -U kineuron
+    ```
+
+    - All dependencies are downloaded and installed. To verify that it has been installed correctly, you can check the following output:
+
+    ```console
+    $ python -c "import kineuron; print(kineuron.__version__)"
+    '0.1.0'
+    ```
+
+2. Via GitHub:
+
+    - Clone this project [repository](https://github.com/alexini-mv/kinetic-neurotransmission) to your local workspace.
+    - Create a new Python Virtual Environment with [venv](https://docs.python.org/3/library/venv.html) or [conda](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html).
+    - Install the required libraries from the file `requeriments.txt` into your virtual environment as follow:
+
+    ```console
+    $ python -m pip install -r requeriments.txt
+    ```
+
+You are ready to use KiNeuron.
 
 ## Usage Example
 
@@ -63,13 +88,13 @@ fusion = TransitionState(name='Fusion')
 alpha = RateConstant(name="α", value=0.3, calcium_dependent=True)
 beta = RateConstant(name="β", value=15)
 
-tr1 = Transition(name='Transition 1', 
+tr1 = Transition(name='Transition 1',
                  rate_constant=alpha,
-                 origin="Docked", 
+                 origin="Docked",
                  destination="Fusion")
-tr2 = Transition(name='Transition 2', 
+tr2 = Transition(name='Transition 2',
                  rate_constant=beta,
-                 origin="Fusion", 
+                 origin="Fusion",
                  destination="Docked")
 ```
 
@@ -192,6 +217,8 @@ $ python main.py
 
 ## Release History
 
+- 0.1.0
+  - Stable version released.
 - 0.0.1
   - Work in progress.
 
@@ -199,26 +226,26 @@ $ python main.py
 
 - If you are interested in contributing to the project, please follow these guidelines:
 
-  1.  Fork it (https://github.com/alexini-mv/kinetic-neurotransmission)
-  2.  Create your feature branch
+  1.  Fork it (https://github.com/alexini-mv/kinetic-neurotransmission).
+  2.  Create your feature branch:
 
   ```console
   $ git checkout -b feature/fooBar
   ```
 
-  3.  Commit your changes
+  3.  Commit your changes:
 
   ```console
   $ git commit -am 'Add some fooBar'
   ```
 
-  4.  Push to the branch
+  4.  Push to the branch:
 
   ```console
   $ git push origin feature/fooBar
   ```
 
-  5.  Create a new Pull Request
+  5.  Create a new Pull Request.
 
 - If you want to report a bug, please create a new issue [here](https://github.com/alexini-mv/kinetic-neurotransmission/issues) describing the error as clearly as possible.
 
