@@ -2,7 +2,7 @@
 
 ## KiNeuron: Python implementation of the kinetic model of neuromuscular transmission dynamics.
 
-![](https://img.shields.io/static/v1?label=python&message=3.7%20|%203.8%20|%203.9%20|%203.10&color=informational)
+![](https://img.shields.io/static/v1?label=python&message=3.6%20|%203.7%20|%203.8%20|%203.9%20|%203.10&color=informational)
 ![](https://img.shields.io/static/v1?label=pypi%20package&message=v0.1.0&color=%2334D058)
 ![](https://img.shields.io/static/v1?label=test&message=passed&color=%2334D058)
 [![](https://img.shields.io/static/v1?label=DOI&message=10.3389/fnsyn.2021.785361&color=informational)](https://www.frontiersin.org/articles/10.3389/fnsyn.2021.785361)
@@ -26,25 +26,45 @@ KiNeuron is:
 
 KiNeuron requires:
 
-- python >= 3.7
-- graphviz == 0.19.1
-- matplotlib == 3.5.1
-- numpy == 1.21.5
-- pandas == 1.2.5
+- python >= 3.6
+- graphviz >= 0.19.1
+- matplotlib >= 3.3.4
+- numpy >= 1.19.5
+- pandas >= 1.1.5, <1.3.0
 
 To use the graph display functions of the model, it is necessary to install the Graphviz library as described in follow [documentation](https://graphviz.org/download/).
 
 ## Installation
 
-- Clone this project [repository](https://github.com/alexini-mv/kinetic-neurotransmission) to your local workspace.
-- Create a new Python Virtual Environment with [venv](https://docs.python.org/3/library/venv.html) or [conda](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html).
-- Install the required libraries from the file `requeriments.txt` into your virtual environment as follow:
+There are two ways to install KiNeuron:
 
-```console
-$ pip install -r requeriments.txt
-```
+1. Via PyPI repository (recommended):
 
-You are ready to use our package.
+    - In your local workspace, create a new Python Virtual Environment with [venv](https://docs.python.org/3/library/venv.html) or [conda](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html).
+    - Install KiNeuron as follow:
+
+    ```console
+    $ python -m pip install -U kineuron
+    ```
+
+    - All dependencies are downloaded and installed. To verify that it has been installed correctly, you can check the following output:
+
+    ```console
+    $ python -c "import kineuron; print(kineuron.__version__)"
+    '0.1.0'
+    ```
+
+2. Via GitHub:
+
+    - Clone this project [repository](https://github.com/alexini-mv/kinetic-neurotransmission) to your local workspace.
+    - Create a new Python Virtual Environment with [venv](https://docs.python.org/3/library/venv.html) or [conda](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html).
+    - Install the required libraries from the file `requeriments.txt` into your virtual environment as follow:
+
+    ```console
+    $ python -m pip install -r requeriments.txt
+    ```
+
+You are ready to use KiNeuron.
 
 ## Usage Example
 
@@ -234,7 +254,7 @@ $ python main.py
 Author: Alejandro Martínez-Valencia <a href="https://github.com/alexini-mv" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/25/25231.png" width="23"></a>
 <a href="https://twitter.com/alexinimv" target="_blank"><img src="https://img.icons8.com/fluency/96/000000/twitter-squared.png" width="25"></a> <a href="https://www.linkedin.com/in/amartinezvalencia/" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" width="22"></a>
 
-Email: vaf.ss4@gmail.com
+Email: al.martinez.valencia@gmail.com
 
 ## Citation
 

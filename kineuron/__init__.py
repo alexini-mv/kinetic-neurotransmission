@@ -4,3 +4,5 @@ from .solver import Solver
 from .stimulation import Stimulation
 from .transition import Transition
 from .transition_state import TransitionState
+
+__version__ = "0.1.0"
