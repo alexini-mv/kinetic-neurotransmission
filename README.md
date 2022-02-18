@@ -32,7 +32,7 @@ KiNeuron requires:
 - numpy >= 1.19.5
 - pandas >= 1.1.5, <1.3.0
 
-To use the graph display functions of the model, it is necessary to install the Graphviz library as described in following [documentation](https://graphviz.org/download/).
+To use the graph display functions of the model, it is necessary to install Graphviz backend for your OS as described in following [documentation](https://graphviz.org/download/).
 
 ## Installation
 
