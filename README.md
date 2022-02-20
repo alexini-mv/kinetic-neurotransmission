@@ -31,6 +31,7 @@ KiNeuron requires:
 - matplotlib >= 3.3.4
 - numpy >= 1.19.5
 - pandas >= 1.1.5, <1.3.0
+- tqdm >= 4.62.3
 
 To use the graph display functions of the model, it is necessary to install Graphviz backend for your OS as described in following [documentation](https://graphviz.org/download/).
 
@@ -217,6 +218,8 @@ $ python main.py
 
 ## Release History
 
+- 0.1.1
+  - Add a progress bar when simulations are running.
 - 0.1.0
   - Stable version released.
 - 0.0.1

@@ -23,10 +23,10 @@ model.add_transitions([tr1, tr2])
 
 model.init()
 
-model.get_info()
+# model.get_info()
 
-graph = model.get_graph()
-graph.view()
+# graph = model.get_graph()
+# graph.view()
 
 
 protocol = Stimulation(
@@ -39,15 +39,15 @@ protocol = Stimulation(
     type_stimulus='exponential_decay',
     name="Custom Stimulation Protocol")
 
-t = np.arange(0, 0.5, 0.0001)
-protocol.plot(t)
+# t = np.arange(0, 0.5, 0.0001)
+# protocol.plot(t)
 
 experiment = Solver(model=model, stimulation=protocol)
 experiment.resting_state()
 
-experiment.run(repeat=1)
-results = experiment.get_results(mean=True)
-results.plot()
-plt.show()
+experiment.run(repeat=500)
+# results = experiment.get_results(mean=True)
+# results.plot()
+# plt.show()
 
-results.to_csv("results.csv", index=True)
+# results.to_csv("results.csv", index=True)

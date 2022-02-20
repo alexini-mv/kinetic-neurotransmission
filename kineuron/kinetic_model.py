@@ -231,6 +231,7 @@ class KineticModel(Synapse):
         for _, value in self.__transition_states.items():
             value.update(self.__vesicles)
             break
+        print("Model initialized")
         self.set_resting_state()
 
     def set_initial_state(self, dictionary_state: dict) -> None:

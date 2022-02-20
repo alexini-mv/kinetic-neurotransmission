@@ -2,6 +2,7 @@ import math
 from random import random
 
 import pandas as pd
+from tqdm.auto import trange
 
 from .kinetic_model import KineticModel
 from .stimulation import Stimulation
@@ -54,6 +55,8 @@ class Solver:
             Time that the model will evolve to reach the resting state. The time
             is measured in seconds.
         """
+        print("\nDetermining Resting State...")
+
         self.__gillespie(repeat=1, time_end=time_end,
                          time_save=0.1, init_resting_state=True)
         self.__model.set_resting_state()
@@ -80,6 +83,8 @@ class Solver:
         msg = "You have not set the resting state of the model."
         assert self.__resting_state, msg
 
+        print("\nRunning Simulation of Model...")
+
         if method == 'gillespie':
             self.__gillespie(repeat=repeat, time_end=time_end,
                              time_save=time_save)
@@ -101,11 +106,16 @@ class Solver:
             obtain the resting state of the model. Otherwise, the results are 
             from a common run.
         """
+        
         if init_resting_state:
+            print("Set resting state...")
             self.__resting_state_simulation = pd.DataFrame(
                 results).set_index(['run', 'time'])
         else:
+            print("Generating results...")
             self.__results = pd.DataFrame(results).set_index(['run', 'time'])
+        
+        print("Done")
 
     def get_results(self, mean: bool = False) -> pd.DataFrame:
         """Returns a pandas.DataFrame object containing the simulation results.
@@ -154,7 +164,7 @@ class Solver:
             considering the stimulation protocol.
         """
         results = []
-        for i in range(repeat):
+        for i in trange(repeat, desc="Progress: ", ascii=True, colour="green"):
             # -----------------------------------------------------------------
             # Initialize the model in its previously found resting state.
             # -----------------------------------------------------------------
