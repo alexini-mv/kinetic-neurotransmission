@@ -37,6 +37,9 @@ class TestKineticModel(unittest.TestCase):
     def test_get_name(self) -> None:
         self.assertEqual(self.model.get_name(), "my-model")
 
+    def test_get_init_resting_state(self) -> None:
+        self.assertFalse(self.model.init_resting_state)
+
     def test_get_vesicles(self) -> None:
         self.assertEqual(self.model.get_vesicles(), 100)
 

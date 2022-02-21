@@ -12,15 +12,15 @@ from pandas.testing import assert_frame_equal
 
 class TestSolver(unittest.TestCase):
     def setUp(self) -> None:
-        model = KineticModel(name='my-model', vesicles=100)
+        self.model = KineticModel(name='my-model', vesicles=100)
 
         docked = TransitionState(name='Docked')
         fusion = TransitionState(name='Fusion')
-        model.add_transition_states([docked, fusion])
+        self.model.add_transition_states([docked, fusion])
 
         alpha = RateConstant(name="α", value=0.3, calcium_dependent=True)
         beta = RateConstant(name="β", value=15)
-        model.add_rate_constants([alpha, beta])
+        self.model.add_rate_constants([alpha, beta])
 
         tr1 = Transition(name='Transition 1',
                          rate_constant=alpha,
@@ -32,8 +32,8 @@ class TestSolver(unittest.TestCase):
                          origin="Fusion",
                          destination="Docked"
                          )
-        model.add_transitions([tr1, tr2])
-        model.init()
+        self.model.add_transitions([tr1, tr2])
+        self.model.init()
 
         parameters = {"conditional_stimuli": 5,
                       "period": 0.03,
@@ -46,7 +46,7 @@ class TestSolver(unittest.TestCase):
                       }
         protocol = Stimulation(**parameters)
 
-        self.experiment = Solver(model=model, stimulation=protocol)
+        self.experiment = Solver(model=self.model, stimulation=protocol)
 
     def test_not_resting_state(self) -> None:
         self.assertRaises(AssertionError, self.experiment.run)
@@ -60,6 +60,7 @@ class TestSolver(unittest.TestCase):
         actual_resting_state = pd.read_csv(file, index_col="time")
         self.experiment.resting_state()
 
+        self.assertTrue(self.model.init_resting_state)
         self.assertIsInstance(
             self.experiment.get_resting_simulation(), pd.DataFrame)
         assert_frame_equal(

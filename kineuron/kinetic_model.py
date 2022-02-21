@@ -9,6 +9,10 @@ class KineticModel(Synapse):
 
     Attributs
     ---------
+    init_resting_state : bool
+        If is True, it indicates that the initial kinetic state of the model 
+        is the resting state. Otherwise, the initial state is other.
+
     vesicles : int
         Total number of vesicles simulated in the kinetic model.
     
@@ -93,6 +97,7 @@ class KineticModel(Synapse):
             Total number of vesicles to be simulated in the model.
         """
         super().__init__(name)
+        self.init_resting_state: bool = None
         self.__vesicles: int = vesicles
         self.__rates: dict = None
         self.__transitions: dict = None
@@ -203,6 +208,7 @@ class KineticModel(Synapse):
         msg = ["","  MODEL INFORMATION  ".center(width, "="),
                "MODEL NAME:".ljust(left) + self.get_name(),
                "TOTAL VESICLES:".ljust(left) + str(self.__vesicles),
+               "RESTING STATE:".ljust(left) + str(self.init_resting_state),
                "",
                "TRANSITION STATES".ljust(left) + "VESICLES"]
 
@@ -228,6 +234,8 @@ class KineticModel(Synapse):
     def init(self) -> None:
         """Initializes the model and prepares it before running any simulation.
         """
+        self.init_resting_state: bool = False
+
         for _, value in self.__transition_states.items():
             value.update(self.__vesicles)
             break

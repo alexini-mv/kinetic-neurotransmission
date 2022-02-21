@@ -10,7 +10,7 @@ from .stimulation import Stimulation
 
 class Solver:
     """It defines the solver in charge of performing the time evolution of the
-    neuromuscular kinetic transmission model, using the Gillespie Stochastic 
+    neuromuscular kinetic transmission model, using the Gillespie Stochastic
     Algorithm (1977).
 
     Methods
@@ -24,7 +24,7 @@ class Solver:
         Returns a pandas.DataFrame object with the result of the simulation
         of the resting state search.
     get_results
-        Returns a pandas.DataFrame object with the result of the model 
+        Returns a pandas.DataFrame object with the result of the model
         simulation.
     """
 
@@ -35,16 +35,15 @@ class Solver:
         Parameters
         ----------
         model: kineuron.KineticModel object
-            Model to be simulated. This model must include all 
-            kineuron.TransitionState, kineuron.Transition and 
+            Model to be simulated. This model must include all
+            kineuron.TransitionState, kineuron.Transition and
             kineuron.RateConstant objects.
         stimulation: kineuron.Stimulation object
-            kineuron.Stimulation object containing the stimulation protocol 
+            kineuron.Stimulation object containing the stimulation protocol
             information.
         """
         self.__model: KineticModel = model
         self.__stimulation: Stimulation = stimulation
-        self.__resting_state: bool = False
 
     def resting_state(self, time_end: float = 30.0) -> None:
         """Simulates the model from its initial state to the resting state.
@@ -57,10 +56,10 @@ class Solver:
         """
         print("\nDetermining Resting State...")
 
-        self.__gillespie(repeat=1, time_end=time_end,
-                         time_save=0.1, init_resting_state=True)
+        self.__gillespie(repeat=1, time_end=time_end, time_save=0.1,
+                         resting_state_simulation=True)
         self.__model.set_resting_state()
-        self.__resting_state = True
+        self.__model.init_resting_state = True
 
     def run(self, repeat: int = 1, time_end: float = 1.0,
             time_save: float = 0.0001, method: str = 'gillespie') -> None:
@@ -81,7 +80,7 @@ class Solver:
         """
 
         msg = "You have not set the resting state of the model."
-        assert self.__resting_state, msg
+        assert self.__model.init_resting_state, msg
 
         print("\nRunning Simulation of Model...")
 
@@ -93,7 +92,8 @@ class Solver:
                 "object. The currently defined method is 'gillespie'."
             raise ValueError(message)
 
-    def __save_results(self, results: list, init_resting_state: bool) -> None:
+    def __save_results(self, results: list,
+                       resting_state_simulation: bool) -> None:
         """Saves the temporal evolution of the model in a pandas.DataFrame
         object.
 
@@ -101,12 +101,12 @@ class Solver:
         ----------
         results: list
             List that temporarily saves the results of the simulation.
-        init_resting_state: bool
+        resting_state_simulation: bool
             If the value is 'True', it indicates that the simulation is to
-            obtain the resting state of the model. Otherwise, the results are 
+            obtain the resting state of the model. Otherwise, the results are
             from a common run.
         """
-        if init_resting_state:
+        if resting_state_simulation:
             print("Set resting state...")
             self.__resting_state_simulation = pd.DataFrame(
                 results).set_index(['run', 'time'])
@@ -145,7 +145,7 @@ class Solver:
         return self.__resting_state_simulation.droplevel(level=0)
 
     def __gillespie(self, repeat: int, time_end: float,
-                    time_save: float, init_resting_state=False) -> None:
+                    time_save: float, resting_state_simulation=False) -> None:
         """Implementation of Gillespie Stochastic Algorithm (1977).
 
         Parameters
@@ -157,8 +157,8 @@ class Solver:
         time_save: float
             Interval of seconds in which the instantaneous state of the model
              is saved periodically.
-        init_resting_state: bool, optional
-            If the value is 'True', simulate the model to find its resting
+        resting_state_simulation: bool, optional
+            If the value is 'True' simulate the model to find its resting
             state. Otherwise, it simulates the evolution of the model
             considering the stimulation protocol.
         """
@@ -192,9 +192,10 @@ class Solver:
                     # ---------------------------------------------------------
                     # The contribution of Stimulation is included.
                     # ---------------------------------------------------------
-                    if item.get_rate_constant().get_calcium_dependent() and not init_resting_state:
-                        dummy_rate += self.__stimulation.stimuli(t)
+                    if item.get_rate_constant().get_calcium_dependent() and \
+                            not resting_state_simulation:
 
+                        dummy_rate += self.__stimulation.stimuli(t)
                     # ---------------------------------------------------------
                     # Propensity value for each individual transition is saved
                     # ---------------------------------------------------------
@@ -260,5 +261,5 @@ class Solver:
         # ----------------------------------------------------------------------
         # The results of all iterations of the algorithm are saved.
         # ----------------------------------------------------------------------
-        self.__save_results(results, init_resting_state)
+        self.__save_results(results, resting_state_simulation)
         del results

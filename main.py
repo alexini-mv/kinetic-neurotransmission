@@ -22,9 +22,7 @@ model.add_rate_constants([alpha, beta])
 model.add_transitions([tr1, tr2])
 
 model.init()
-
 model.get_info()
-
 # graph = model.get_graph()
 # graph.view()
 
