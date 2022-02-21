@@ -3,7 +3,7 @@
 ## KiNeuron: Python implementation of the kinetic model of neuromuscular transmission dynamics.
 
 ![](https://img.shields.io/static/v1?label=python&message=3.6%20|%203.7%20|%203.8%20|%203.9%20|%203.10&color=informational)
-![](https://img.shields.io/static/v1?label=pypi%20package&message=v0.1.0&color=%2334D058)
+![](https://img.shields.io/static/v1?label=pypi%20package&message=v0.1.1&color=%2334D058)
 ![](https://img.shields.io/static/v1?label=test&message=passed&color=%2334D058)
 [![](https://img.shields.io/static/v1?label=DOI&message=10.3389/fnsyn.2021.785361&color=informational)](https://doi.org/10.3389/fnsyn.2021.785361)
 
@@ -30,7 +30,7 @@ KiNeuron requires:
 - graphviz >= 0.19.1
 - matplotlib >= 3.3.4
 - numpy >= 1.19.5
-- pandas >= 1.1.5, <1.3.0
+- pandas >= 1.1.5
 - tqdm >= 4.62.3
 
 To use the graph display functions of the model, it is necessary to install Graphviz backend for your OS as described in following [documentation](https://graphviz.org/download/).
@@ -220,6 +220,7 @@ $ python main.py
 
 - 0.1.1
   - Add a progress bar when simulations are running.
+  - Fixed compatibility with pandas >=1.3.0 versions.
 - 0.1.0
   - Stable version released.
 - 0.0.1
