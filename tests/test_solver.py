@@ -1,8 +1,10 @@
 import os
 import random
 import unittest
+from unittest.mock import patch
 
 import pandas as pd
+import numpy as np
 from kineuron import (KineticModel, RateConstant, Solver, Stimulation,
                       Transition, TransitionState)
 from pandas.testing import assert_frame_equal

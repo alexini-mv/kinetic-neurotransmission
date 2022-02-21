@@ -106,7 +106,6 @@ class Solver:
             obtain the resting state of the model. Otherwise, the results are 
             from a common run.
         """
-        
         if init_resting_state:
             print("Set resting state...")
             self.__resting_state_simulation = pd.DataFrame(
@@ -114,7 +113,7 @@ class Solver:
         else:
             print("Generating results...")
             self.__results = pd.DataFrame(results).set_index(['run', 'time'])
-        
+
         print("Done")
 
     def get_results(self, mean: bool = False) -> pd.DataFrame:
@@ -131,7 +130,7 @@ class Solver:
         pandas.DataFrame object.
         """
         if mean:
-            return self.__results.mean(level=1)
+            return self.__results.groupby(level=1).mean()
         else:
             return self.__results
 
@@ -143,7 +142,7 @@ class Solver:
         ------
         pandas.DataFrame object.
         """
-        return self.__resting_state_simulation.mean(level=1)
+        return self.__resting_state_simulation.droplevel(level=0)
 
     def __gillespie(self, repeat: int, time_end: float,
                     time_save: float, init_resting_state=False) -> None:
@@ -262,3 +261,4 @@ class Solver:
         # The results of all iterations of the algorithm are saved.
         # ----------------------------------------------------------------------
         self.__save_results(results, init_resting_state)
+        del results

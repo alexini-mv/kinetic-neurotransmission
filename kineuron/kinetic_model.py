@@ -200,7 +200,7 @@ class KineticModel(Synapse):
         width = 50
         left = 30
 
-        msg = ["  MODEL INFORMATION  ".center(width, "="),
+        msg = ["","  MODEL INFORMATION  ".center(width, "="),
                "MODEL NAME:".ljust(left) + self.get_name(),
                "TOTAL VESICLES:".ljust(left) + str(self.__vesicles),
                "",
