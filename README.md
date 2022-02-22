@@ -3,7 +3,7 @@
 ## KiNeuron: Python implementation of the kinetic model of neuromuscular transmission dynamics.
 
 ![](https://img.shields.io/static/v1?label=python&message=3.6%20|%203.7%20|%203.8%20|%203.9%20|%203.10&color=informational)
-![](https://img.shields.io/static/v1?label=pypi%20package&message=v0.1.1&color=%2334D058)
+[![](https://img.shields.io/static/v1?label=pypi%20package&message=v0.1.1&color=%2334D058)](https://pypi.org/project/kineuron/)
 ![](https://img.shields.io/static/v1?label=test&message=passed&color=%2334D058)
 [![](https://img.shields.io/static/v1?label=DOI&message=10.3389/fnsyn.2021.785361&color=informational)](https://doi.org/10.3389/fnsyn.2021.785361)
 
@@ -52,7 +52,7 @@ There are two ways to install KiNeuron:
 
     ```console
     $ python -c "import kineuron; print(kineuron.__version__)"
-    '0.1.0'
+    '0.1.1'
     ```
 
 2. Via GitHub:
@@ -216,13 +216,16 @@ Finally, the `main.py` file should be executed to perform the complete simulatio
 $ python main.py
 ```
 
-## Release History
+## Changelog
 
 - 0.1.1
-  - Add a progress bar when simulations are running.
+  - Added a progress bar when simulations are running.
   - Fixed compatibility with pandas >=1.3.0 versions.
   - Simplification of adding objects to the model. It is not necessary to 
-    explicitly declare `KineticModel.add_rate_constants` method.
+    explicitly declare `KineticModel.add_rate_constants()` method.
+  - Added a _AssertionError_ if the model is not initialized.
+  - Bug fixed in the number of vesicles when calling two or more times `KineticModel.init()` 
+    method.
 - 0.1.0
   - Stable version released.
 - 0.0.1

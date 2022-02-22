@@ -54,12 +54,16 @@ class Solver:
             Time that the model will evolve to reach the resting state. The time
             is measured in seconds.
         """
+        message = "The model is not initialized. Make sure to include the " + \
+            "'KineticModel.init()' method."
+        assert self.__model._init_flag, message
+
         print("\nDetermining Resting State...")
 
         self.__gillespie(repeat=1, time_end=time_end, time_save=0.1,
                          resting_state_simulation=True)
         self.__model.set_resting_state()
-        self.__model.init_resting_state = True
+        self.__model._init_resting_state = True
 
     def run(self, repeat: int = 1, time_end: float = 1.0,
             time_save: float = 0.0001, method: str = 'gillespie') -> None:
@@ -78,9 +82,9 @@ class Solver:
         method: str, optional
             Name of the algorithm to be used. Currently only accepts 'gillespie'.
         """
-
-        msg = "You have not set the resting state of the model."
-        assert self.__model.init_resting_state, msg
+        message = "The resting state has not been set in the model. Make sure " + \
+            "to include the 'Solver.resting_state()' method."
+        assert self.__model._init_resting_state, message
 
         print("\nRunning Simulation of Model...")
 

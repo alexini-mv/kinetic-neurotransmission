@@ -34,8 +34,17 @@ class TestKineticModel(unittest.TestCase):
     def test_get_name(self) -> None:
         self.assertEqual(self.model.get_name(), "my-model")
 
+    def test_init_model(self) -> None:
+        self.assertTrue(self.model._init_flag)
+
+        model2 = KineticModel(name='my-model-2', vesicles=100)
+        model2.add_transition_states(self.list_transition_states)
+        model2.add_transitions(self.list_transitions)
+
+        self.assertFalse(model2._init_flag)
+
     def test_get_init_resting_state(self) -> None:
-        self.assertFalse(self.model.init_resting_state)
+        self.assertFalse(self.model._init_resting_state)
 
     def test_get_vesicles(self) -> None:
         self.assertEqual(self.model.get_vesicles(), 100)
