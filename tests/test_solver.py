@@ -10,15 +10,15 @@ from pandas.testing import assert_frame_equal
 
 class TestSolver(unittest.TestCase):
     def setUp(self) -> None:
-        model = KineticModel(name='my-model', vesicles=100)
+        self.model = KineticModel(name='my-model', vesicles=100)
 
         docked = TransitionState(name='Docked')
         fusion = TransitionState(name='Fusion')
-        model.add_transition_states([docked, fusion])
+        self.list_transition_states = [docked, fusion]
+        self.model.add_transition_states(self.list_transition_states)
 
         alpha = RateConstant(name="α", value=0.3, calcium_dependent=True)
         beta = RateConstant(name="β", value=15)
-        model.add_rate_constants([alpha, beta])
 
         tr1 = Transition(name='Transition 1',
                          rate_constant=alpha,
@@ -30,8 +30,9 @@ class TestSolver(unittest.TestCase):
                          origin="Fusion",
                          destination="Docked"
                          )
-        model.add_transitions([tr1, tr2])
-        model.init()
+        self.list_transitions = [tr1, tr2]
+        self.model.add_transitions(self.list_transitions)
+        self.model.init()
 
         parameters = {"conditional_stimuli": 5,
                       "period": 0.03,
@@ -42,9 +43,17 @@ class TestSolver(unittest.TestCase):
                       "type_stimulus": "exponential_decay",
                       "name": "Custom Stimulation Protocol"
                       }
-        protocol = Stimulation(**parameters)
+        self.protocol = Stimulation(**parameters)
 
-        self.experiment = Solver(model=model, stimulation=protocol)
+        self.experiment = Solver(model=self.model, stimulation=self.protocol)
+
+    def test_not_init_model(self) -> None:
+        model2 = KineticModel(name='my-model-2', vesicles=100)
+        model2.add_transition_states(self.list_transition_states)
+        model2.add_transitions(self.list_transitions)
+        experiment = Solver(model=model2, stimulation=self.protocol)
+        
+        self.assertRaises(AssertionError, experiment.resting_state)
 
     def test_not_resting_state(self) -> None:
         self.assertRaises(AssertionError, self.experiment.run)
@@ -58,10 +67,21 @@ class TestSolver(unittest.TestCase):
         actual_resting_state = pd.read_csv(file, index_col="time")
         self.experiment.resting_state()
 
+        self.assertTrue(self.model._init_resting_state)
         self.assertIsInstance(
             self.experiment.get_resting_simulation(), pd.DataFrame)
         assert_frame_equal(
             self.experiment.get_resting_simulation(), actual_resting_state)
+
+    def test_reset_init(self) -> None:
+        random.seed(36)
+        for _ in range(10):
+            self.experiment.resting_state()
+            self.model.init()
+
+        vesicles = sum(self.model.get_current_state().values())
+
+        self.assertEqual(vesicles, self.model.get_vesicles())
 
     def test_not_gillespie(self) -> None:
         self.experiment.resting_state()
@@ -81,6 +101,13 @@ class TestSolver(unittest.TestCase):
         self.assertIsInstance(self.experiment.get_results(), pd.DataFrame)
         assert_frame_equal(
             self.experiment.get_results(mean=True), actual_run_results)
+
+    def test_number_vesicles_final(self) -> None:
+        self.experiment.resting_state()
+        self.experiment.run(repeat=1, time_end=120.0, time_save=1.0)
+        vesicles = sum(self.model.get_current_state().values())
+
+        self.assertEqual(vesicles, self.model.get_vesicles())
 
 
 if __name__ == '__main__':

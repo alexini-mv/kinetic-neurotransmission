@@ -17,9 +17,6 @@ class TestKineticModel(unittest.TestCase):
         alpha = RateConstant(name="α", value=0.3, calcium_dependent=True)
         beta = RateConstant(name="β", value=15)
 
-        self.list_rate_constants = [alpha, beta]
-        self.model.add_rate_constants(self.list_rate_constants)
-
         tr1 = Transition(name='Transition 1',
                          rate_constant=alpha,
                          origin="Docked",
@@ -33,9 +30,21 @@ class TestKineticModel(unittest.TestCase):
         self.list_transitions = [tr1, tr2]
         self.model.add_transitions(self.list_transitions)
         self.model.init()
-        
+
     def test_get_name(self) -> None:
         self.assertEqual(self.model.get_name(), "my-model")
+
+    def test_init_model(self) -> None:
+        self.assertTrue(self.model._init_flag)
+
+        model2 = KineticModel(name='my-model-2', vesicles=100)
+        model2.add_transition_states(self.list_transition_states)
+        model2.add_transitions(self.list_transitions)
+
+        self.assertFalse(model2._init_flag)
+
+    def test_get_init_resting_state(self) -> None:
+        self.assertFalse(self.model._init_resting_state)
 
     def test_get_vesicles(self) -> None:
         self.assertEqual(self.model.get_vesicles(), 100)

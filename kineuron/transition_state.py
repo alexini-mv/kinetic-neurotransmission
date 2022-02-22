@@ -86,7 +86,7 @@ class TransitionState(Synapse):
             Name of the kineuron.TransitionState object and its number of 
             vesicles.
         """
-        return f"{self.get_name()}:".ljust(30) + str(self.get_vesicles())
+        return f"- {self.get_name()}:".ljust(30) + str(self.get_vesicles())
 
     def get_info(self) -> None:
         """Returns the general information of the kineuron.TransitionState 

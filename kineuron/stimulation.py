@@ -158,7 +158,7 @@ class Stimulation(Synapse):
         return self.__intensity_stimulus * f
 
     def plot(self, t: float, xlabel: str = "Time",
-             ylabel: str = "Intensity") -> None:
+             ylabel: str = "Intensity", **kwargs) -> None:
         """Plots the profile of the stimulation protocol over a range of time.
 
         Parameters
@@ -171,7 +171,7 @@ class Stimulation(Synapse):
             Name of the y-axis label of the graph. Default 'Intensity'.
         """
         y = np.vectorize(self.stimuli)(t)
-        plt.plot(t, y)
+        plt.plot(t, y, **kwargs)
         plt.title(self.get_name())
         plt.xlabel(xlabel)
         plt.ylabel(ylabel)

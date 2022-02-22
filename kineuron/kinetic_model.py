@@ -1,5 +1,7 @@
 from graphviz import Digraph
 
+from kineuron import transition_state
+
 from .neuromuscular import Synapse
 
 
@@ -9,71 +11,67 @@ class KineticModel(Synapse):
 
     Attributs
     ---------
+    _init_resting_state : bool
+        If is True, it indicates that the initial kinetic state of the model
+        is the resting state. Otherwise, the initial state is other.
+
     vesicles : int
         Total number of vesicles simulated in the kinetic model.
-    
-    rates : dict
-        Dictionary with the name and values of the kineuron.RateConstant 
-        objects associated to each kineuron. Transition object within the model.
 
     transitions : dict
-        Dictionary with the name and values of the kineuron.Transition objects 
+        Dictionary with the name and values of the kineuron.Transition objects
         defined in the model.
 
     transition_states : dict
-        Dictionary with the name and values of the kineuron.TransitionState 
+        Dictionary with the name and values of the kineuron.TransitionState
         objects defined in the model.
 
 
     Methods
     -------
-    add_rate_constants
-        Adds to the model a list of all kineuron.RateConstant objects of each 
-        vesicular kinetic transition.
-    
     add_transitions
-        Adds to the model a list of all the kineuron.Transitions objects between 
+        Adds to the model a list of all the kineuron.Transitions objects between
         the kineuron.TransitionState objects within the model.
-    
+
     add_transition_states
-        Adds to the model a list of all the kineuron.TransitionState objects 
+        Adds to the model a list of all the kineuron.TransitionState objects
         that constitute the model.
-    
+
     get_current_state
         Returns a dictionary with the name and number of instantaneous vesicles
         in each of the kineuron.TransitionState objects defined in the model.
-    
+
     get_graph
         It generates a graph with the model information, i.e. the name of
         the vesicular kinetic states, transitions and rate constants.
-    
+
     get_info
         Prints the general information of the model, i.e. the name and status
-        of the kineuron.TransitionState, kineuron.Transition, 
+        of the kineuron.TransitionState, kineuron.Transition,
         kineuron.RateConstant objects.
-    
+
     get_resting_state
         Returns a dictionary with the name and number of vesicles in each
-        kineuron.TransitionState object corresponding to the model resting 
+        kineuron.TransitionState object corresponding to the model resting
         state.
-    
+
     get_transitions
         Returns a list of all kineuron.Transition objects defined in the model.
-    
+
     get_transition_states
-        Returns a list of all kineuron.TransitionState object defined within 
+        Returns a list of all kineuron.TransitionState object defined within
         the model.
-    
+
     get_vesicle
         Returns the total number of vesicles that are simulated in the model.
-    
+
     init
         Initializes the model with the added objects and prepares it to start
         the simulation.
 
     set_initial_state
         An initial state of the model is established (name and number of
-        vesicles in each kineuron.TransitionState object) from which the model 
+        vesicles in each kineuron.TransitionState object) from which the model
         will be simulated.
 
     set_resting_state
@@ -88,13 +86,14 @@ class KineticModel(Synapse):
         ----------
         name : str, optional
             Model name.
-        
+
         vesicles : int, optional
             Total number of vesicles to be simulated in the model.
         """
         super().__init__(name)
+        self._init_flag: bool = None
+        self._init_resting_state: bool = None
         self.__vesicles: int = vesicles
-        self.__rates: dict = None
         self.__transitions: dict = None
         self.__transition_states: dict = None
 
@@ -112,16 +111,6 @@ class KineticModel(Synapse):
             Dictionary with the name of each item and the object.
         """
         return {item.get_name(): item for item in list_items}
-
-    def add_rate_constants(self, rates: list) -> None:
-        """Adds a list of kineuron.RateConstant objects inside the model.
-
-        Parameters
-        ----------
-        rates : list
-            List of kineuron.RateConstant objects.
-        """
-        self.__rates: dict = self.__dict_items(rates)
 
     def add_transition_states(self, transition_states: list) -> None:
         """Adds a list of kineuron.TransitionState objects inside the model.
@@ -176,13 +165,13 @@ class KineticModel(Synapse):
         return self.__transitions
 
     def get_current_state(self) -> dict:
-        """Returns the name and number of vesicles in each 
+        """Returns the name and number of vesicles in each
         kineuron.TransitionState in the current state of the model.
 
         Return
         ------
         dict
-            Dictionary with the name of each kineuron.TransitionState and the 
+            Dictionary with the name of each kineuron.TransitionState and the
             number of vesicles in that state.
         """
         return {name: item.get_vesicles() for name, item in self.__transition_states.items()}
@@ -194,17 +183,17 @@ class KineticModel(Synapse):
         ------
         str
             Name model, the total number of vesicles and the
-            information of the kineuron.TransitionState, kineuron.Transition 
+            information of the kineuron.TransitionState, kineuron.Transition
             and kineuron.RateConstant objects.
         """
         width = 50
         left = 30
 
-        msg = ["  MODEL INFORMATION  ".center(width, "="),
+        msg = ["", "  MODEL INFORMATION  ".center(width, "="),
                "MODEL NAME:".ljust(left) + self.get_name(),
                "TOTAL VESICLES:".ljust(left) + str(self.__vesicles),
-               "",
-               "TRANSITION STATES".ljust(left) + "VESICLES"]
+               "RESTING STATE:".ljust(left) + str(self._init_resting_state),
+               "", "TRANSITION STATES".ljust(left) + "VESICLES"]
 
         if self.__transition_states is not None and self.__transitions is not None:
             for _, item in {**self.__transition_states, **self.__transitions}.items():
@@ -219,8 +208,8 @@ class KineticModel(Synapse):
 
         Return
         ------
-            Prints the model name, the total number of vesicles and the 
-            information of the kineuron.TransitionState, kineuron.Transition 
+            Prints the model name, the total number of vesicles and the
+            information of the kineuron.TransitionState, kineuron.Transition
             and kineuron.RateConstant objects.
         """
         print(self.__str__())
@@ -228,10 +217,18 @@ class KineticModel(Synapse):
     def init(self) -> None:
         """Initializes the model and prepares it before running any simulation.
         """
-        for _, value in self.__transition_states.items():
-            value.update(self.__vesicles)
-            break
+        for i, value in enumerate(self.__transition_states.values()):
+            if i == 0:
+                value.update(self.__vesicles)
+            else:
+                value.update(0)
+
         self.set_resting_state()
+
+        self._init_flag: bool = True
+        self._init_resting_state: bool = False
+
+        print("Model initialized")
 
     def set_initial_state(self, dictionary_state: dict) -> None:
         """Sets a particular initial state for the model.
@@ -239,7 +236,7 @@ class KineticModel(Synapse):
         Parameters
         ----------
         dictionary_state: dict
-            Dictionary with the name of all kineuron.TransitionState objects 
+            Dictionary with the name of all kineuron.TransitionState objects
             and the number of vesicles in each state.
         """
         for name, state in self.__transition_states.items():

@@ -3,7 +3,7 @@
 ## KiNeuron: Python implementation of the kinetic model of neuromuscular transmission dynamics.
 
 ![](https://img.shields.io/static/v1?label=python&message=3.6%20|%203.7%20|%203.8%20|%203.9%20|%203.10&color=informational)
-![](https://img.shields.io/static/v1?label=pypi%20package&message=v0.1.0&color=%2334D058)
+[![](https://img.shields.io/static/v1?label=pypi%20package&message=v0.1.1&color=%2334D058)](https://pypi.org/project/kineuron/)
 ![](https://img.shields.io/static/v1?label=test&message=passed&color=%2334D058)
 [![](https://img.shields.io/static/v1?label=DOI&message=10.3389/fnsyn.2021.785361&color=informational)](https://doi.org/10.3389/fnsyn.2021.785361)
 
@@ -30,9 +30,10 @@ KiNeuron requires:
 - graphviz >= 0.19.1
 - matplotlib >= 3.3.4
 - numpy >= 1.19.5
-- pandas >= 1.1.5, <1.3.0
+- pandas >= 1.1.5
+- tqdm >= 4.62.3
 
-To use the graph display functions of the model, it is necessary to install the Graphviz library as described in following [documentation](https://graphviz.org/download/).
+To use the graph display functions of the model, it is necessary to install Graphviz backend for your OS as described in following [documentation](https://graphviz.org/download/).
 
 ## Installation
 
@@ -51,7 +52,7 @@ There are two ways to install KiNeuron:
 
     ```console
     $ python -c "import kineuron; print(kineuron.__version__)"
-    '0.1.0'
+    '0.1.1'
     ```
 
 2. Via GitHub:
@@ -88,11 +89,11 @@ fusion = TransitionState(name='Fusion')
 alpha = RateConstant(name="α", value=0.3, calcium_dependent=True)
 beta = RateConstant(name="β", value=15)
 
-tr1 = Transition(name='Transition 1',
+transition1 = Transition(name='Transition 1',
                  rate_constant=alpha,
                  origin="Docked",
                  destination="Fusion")
-tr2 = Transition(name='Transition 2',
+transition2 = Transition(name='Transition 2',
                  rate_constant=beta,
                  origin="Fusion",
                  destination="Docked")
@@ -102,8 +103,7 @@ Add all objects to the model as follow:
 
 ```python
 model.add_transition_states([docked, fusion])
-model.add_rate_constants([alpha, beta])
-model.add_transitions([tr1, tr2])
+model.add_transitions([transition1, transition2])
 ```
 
 Finally, initialize the model:
@@ -155,10 +155,11 @@ $ python main.py
 ==============  MODEL INFORMATION  ===============
 MODEL NAME:                   my-model
 TOTAL VESICLES:               100
+RESTING STATE:                False
 
 TRANSITION STATES             VESICLES
-Docked:                       100
-Fusion:                       0
+- Docked:                     100
+- Fusion:                     0
 --------------------------------------------------
 NAME TRANSITION:              Transition 1
 RATE CONSTANT NAME:           α
@@ -215,8 +216,16 @@ Finally, the `main.py` file should be executed to perform the complete simulatio
 $ python main.py
 ```
 
-## Release History
+## Changelog
 
+- 0.1.1
+  - Added a progress bar when simulations are running.
+  - Fixed compatibility with pandas >=1.3.0 versions.
+  - Simplification of adding objects to the model. It is not necessary to 
+    explicitly declare `KineticModel.add_rate_constants()` method.
+  - Added a _AssertionError_ if the model is not initialized.
+  - Bug fixed in the number of vesicles when calling two or more times `KineticModel.init()` 
+    method.
 - 0.1.0
   - Stable version released.
 - 0.0.1
