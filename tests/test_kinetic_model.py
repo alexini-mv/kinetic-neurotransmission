@@ -17,9 +17,6 @@ class TestKineticModel(unittest.TestCase):
         alpha = RateConstant(name="α", value=0.3, calcium_dependent=True)
         beta = RateConstant(name="β", value=15)
 
-        self.list_rate_constants = [alpha, beta]
-        self.model.add_rate_constants(self.list_rate_constants)
-
         tr1 = Transition(name='Transition 1',
                          rate_constant=alpha,
                          origin="Docked",
@@ -33,7 +30,7 @@ class TestKineticModel(unittest.TestCase):
         self.list_transitions = [tr1, tr2]
         self.model.add_transitions(self.list_transitions)
         self.model.init()
-        
+
     def test_get_name(self) -> None:
         self.assertEqual(self.model.get_name(), "my-model")
 

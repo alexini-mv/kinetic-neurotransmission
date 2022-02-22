@@ -15,10 +15,6 @@ class KineticModel(Synapse):
 
     vesicles : int
         Total number of vesicles simulated in the kinetic model.
-    
-    rates : dict
-        Dictionary with the name and values of the kineuron.RateConstant 
-        objects associated to each kineuron. Transition object within the model.
 
     transitions : dict
         Dictionary with the name and values of the kineuron.Transition objects 
@@ -31,46 +27,42 @@ class KineticModel(Synapse):
 
     Methods
     -------
-    add_rate_constants
-        Adds to the model a list of all kineuron.RateConstant objects of each 
-        vesicular kinetic transition.
-    
     add_transitions
         Adds to the model a list of all the kineuron.Transitions objects between 
         the kineuron.TransitionState objects within the model.
-    
+
     add_transition_states
         Adds to the model a list of all the kineuron.TransitionState objects 
         that constitute the model.
-    
+
     get_current_state
         Returns a dictionary with the name and number of instantaneous vesicles
         in each of the kineuron.TransitionState objects defined in the model.
-    
+
     get_graph
         It generates a graph with the model information, i.e. the name of
         the vesicular kinetic states, transitions and rate constants.
-    
+
     get_info
         Prints the general information of the model, i.e. the name and status
         of the kineuron.TransitionState, kineuron.Transition, 
         kineuron.RateConstant objects.
-    
+
     get_resting_state
         Returns a dictionary with the name and number of vesicles in each
         kineuron.TransitionState object corresponding to the model resting 
         state.
-    
+
     get_transitions
         Returns a list of all kineuron.Transition objects defined in the model.
-    
+
     get_transition_states
         Returns a list of all kineuron.TransitionState object defined within 
         the model.
-    
+
     get_vesicle
         Returns the total number of vesicles that are simulated in the model.
-    
+
     init
         Initializes the model with the added objects and prepares it to start
         the simulation.
@@ -92,14 +84,13 @@ class KineticModel(Synapse):
         ----------
         name : str, optional
             Model name.
-        
+
         vesicles : int, optional
             Total number of vesicles to be simulated in the model.
         """
         super().__init__(name)
         self.init_resting_state: bool = None
         self.__vesicles: int = vesicles
-        self.__rates: dict = None
         self.__transitions: dict = None
         self.__transition_states: dict = None
 
@@ -117,16 +108,6 @@ class KineticModel(Synapse):
             Dictionary with the name of each item and the object.
         """
         return {item.get_name(): item for item in list_items}
-
-    def add_rate_constants(self, rates: list) -> None:
-        """Adds a list of kineuron.RateConstant objects inside the model.
-
-        Parameters
-        ----------
-        rates : list
-            List of kineuron.RateConstant objects.
-        """
-        self.__rates: dict = self.__dict_items(rates)
 
     def add_transition_states(self, transition_states: list) -> None:
         """Adds a list of kineuron.TransitionState objects inside the model.
@@ -205,12 +186,11 @@ class KineticModel(Synapse):
         width = 50
         left = 30
 
-        msg = ["","  MODEL INFORMATION  ".center(width, "="),
+        msg = ["", "  MODEL INFORMATION  ".center(width, "="),
                "MODEL NAME:".ljust(left) + self.get_name(),
                "TOTAL VESICLES:".ljust(left) + str(self.__vesicles),
                "RESTING STATE:".ljust(left) + str(self.init_resting_state),
-               "",
-               "TRANSITION STATES".ljust(left) + "VESICLES"]
+               "", "TRANSITION STATES".ljust(left) + "VESICLES"]
 
         if self.__transition_states is not None and self.__transitions is not None:
             for _, item in {**self.__transition_states, **self.__transitions}.items():

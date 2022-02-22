@@ -18,7 +18,6 @@ tr2 = Transition(name='Transition 2', rate_constant=beta,
                  origin="Fusion", destination="Docked")
 
 model.add_transition_states([docked, fusion])
-model.add_rate_constants([alpha, beta])
 model.add_transitions([tr1, tr2])
 
 model.init()
@@ -44,8 +43,8 @@ experiment = Solver(model=model, stimulation=protocol)
 experiment.resting_state()
 
 experiment.run(repeat=500)
-# results = experiment.get_results(mean=True)
+results = experiment.get_results(mean=True)
 # results.plot()
 # plt.show()
 
-# results.to_csv("results.csv", index=True)
+results.to_csv("results.csv", index=True)

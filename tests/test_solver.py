@@ -20,7 +20,6 @@ class TestSolver(unittest.TestCase):
 
         alpha = RateConstant(name="α", value=0.3, calcium_dependent=True)
         beta = RateConstant(name="β", value=15)
-        self.model.add_rate_constants([alpha, beta])
 
         tr1 = Transition(name='Transition 1',
                          rate_constant=alpha,

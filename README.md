@@ -89,11 +89,11 @@ fusion = TransitionState(name='Fusion')
 alpha = RateConstant(name="α", value=0.3, calcium_dependent=True)
 beta = RateConstant(name="β", value=15)
 
-tr1 = Transition(name='Transition 1',
+transition1 = Transition(name='Transition 1',
                  rate_constant=alpha,
                  origin="Docked",
                  destination="Fusion")
-tr2 = Transition(name='Transition 2',
+transition2 = Transition(name='Transition 2',
                  rate_constant=beta,
                  origin="Fusion",
                  destination="Docked")
@@ -103,8 +103,7 @@ Add all objects to the model as follow:
 
 ```python
 model.add_transition_states([docked, fusion])
-model.add_rate_constants([alpha, beta])
-model.add_transitions([tr1, tr2])
+model.add_transitions([transition1, transition2])
 ```
 
 Finally, initialize the model:
@@ -156,10 +155,11 @@ $ python main.py
 ==============  MODEL INFORMATION  ===============
 MODEL NAME:                   my-model
 TOTAL VESICLES:               100
+RESTING STATE:                False
 
 TRANSITION STATES             VESICLES
-Docked:                       100
-Fusion:                       0
+- Docked:                     100
+- Fusion:                     0
 --------------------------------------------------
 NAME TRANSITION:              Transition 1
 RATE CONSTANT NAME:           α
@@ -221,6 +221,8 @@ $ python main.py
 - 0.1.1
   - Add a progress bar when simulations are running.
   - Fixed compatibility with pandas >=1.3.0 versions.
+  - Simplification of adding objects to the model. It is not necessary to 
+    explicitly declare `KineticModel.add_rate_constants` method.
 - 0.1.0
   - Stable version released.
 - 0.0.1
