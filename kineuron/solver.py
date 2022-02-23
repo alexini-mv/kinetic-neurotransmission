@@ -179,7 +179,7 @@ class Solver:
             # -----------------------------------------------------------------
             # Starts the Gillespie Stochastic Algorithm loop.
             # -----------------------------------------------------------------
-            while True:
+            while tsave <= time_end:
                 a = {}
 
                 # --------------------------------------------------------------
@@ -259,9 +259,6 @@ class Solver:
                 # The previous steps are repeated until the end time of the
                 # simulation is reached.
                 # --------------------------------------------------------------
-                if tsave > time_end:
-                    break
-
         # ----------------------------------------------------------------------
         # The results of all iterations of the algorithm are saved.
         # ----------------------------------------------------------------------
