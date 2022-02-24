@@ -66,7 +66,8 @@ class Solver:
         self.__model._init_resting_state = True
 
     def run(self, repeat: int = 1, time_end: float = 1.0,
-            time_save: float = 0.0001, method: str = 'gillespie') -> None:
+            time_save: float = 0.0001, method: str = 'gillespie',
+            save_transitions: list = []) -> None:
         """Runs the time evolution algorithm of the model. By default, the
         Gillespie stochastic algorithm is invoked.
 
@@ -81,6 +82,9 @@ class Solver:
             will be saved periodically.
         method: str, optional
             Name of the algorithm to be used. Currently only accepts 'gillespie'.
+        save_transitions: list, optional
+            List with the name of the transitions that individual events will
+            be included in the final results.
         """
         message = "The resting state has not been set in the model. Make sure " + \
             "to include the 'Solver.resting_state()' method."
@@ -88,9 +92,16 @@ class Solver:
 
         print("\nRunning Simulation of Model...")
 
+        for element in save_transitions:
+            if element not in self.__model.get_transitions().keys():
+                message = f"'{element}' is not a defined name of any " + \
+                    "kineuron.Transition object in Model."
+                raise ValueError(message)
+
         if method == 'gillespie':
             self.__gillespie(repeat=repeat, time_end=time_end,
-                             time_save=time_save)
+                             time_save=time_save,
+                             save_transitions=save_transitions)
         else:
             message = f"Undefined method in '{self.__class__.__name__}' " + \
                 "object. The currently defined method is 'gillespie'."
@@ -148,8 +159,26 @@ class Solver:
         """
         return self.__resting_state_simulation.droplevel(level=0)
 
-    def __gillespie(self, repeat: int, time_end: float,
-                    time_save: float, resting_state_simulation=False) -> None:
+    def __list2dictzero(self, dummylist: list) -> dict:
+        """Auxiliary function that converts a list of strings into a
+        dictionary with the values initialized to zero.
+
+        Parameters
+        ----------
+        dummylist: list
+            List with strings elements.
+
+        Return
+        ------
+        dict
+            Dictionary with elements of list as keys and all values
+            initialized to zero.
+        """
+        return {element: 0 for element in dummylist}
+
+    def __gillespie(self, repeat: int, time_end: float, time_save: float,
+                    resting_state_simulation: bool = False,
+                    save_transitions: list = []) -> None:
         """Implementation of Gillespie Stochastic Algorithm (1977).
 
         Parameters
@@ -165,8 +194,12 @@ class Solver:
             If the value is 'True' simulate the model to find its resting
             state. Otherwise, it simulates the evolution of the model
             considering the stimulation protocol.
+        save_transitions: list, optional
+            List with the name of the transitions that individual events will
+            be included in the final results.
         """
         results = []
+
         for i in trange(repeat, desc="Progress: ", ascii=True, colour="green"):
             # -----------------------------------------------------------------
             # Initialize the model in its previously found resting state.
@@ -175,6 +208,7 @@ class Solver:
 
             t = 0.0
             tsave = 0.0
+            dummy_transitions = self.__list2dictzero(save_transitions)
 
             # -----------------------------------------------------------------
             # Starts the Gillespie Stochastic Algorithm loop.
@@ -205,14 +239,14 @@ class Solver:
                     # ---------------------------------------------------------
                     a.update({name: dummy_rate * dummy_vesicles})
 
-                # --------------------------------------------------------------
+                # -------------------------------------------------------------
                 # The total propensity of the system is calculated.
-                # --------------------------------------------------------------
+                # -------------------------------------------------------------
                 a0 = sum(a.values())
 
-                # --------------------------------------------------------------
+                # -------------------------------------------------------------
                 # The time in which the next transition will occur is calculated.
-                # --------------------------------------------------------------
+                # -------------------------------------------------------------
                 t = t + math.log(1.0 / random()) / a0
 
                 # -------------------------------------------------------------
@@ -222,14 +256,17 @@ class Solver:
                 while t >= tsave and tsave <= time_end:
                     dummy = {"run": i, "time": round(tsave, 9)}
                     dummy.update(self.__model.get_current_state())
+                    dummy.update(dummy_transitions)
+                    
                     results.append(dummy)
 
+                    dummy_transitions = self.__list2dictzero(save_transitions)
                     tsave += time_save
 
-                # --------------------------------------------------------------
+                # -------------------------------------------------------------
                 # The next transition to be executed within the model is chosen
                 # randomly, considering the total propensity of the system.
-                # --------------------------------------------------------------
+                # -------------------------------------------------------------
                 random_a0 = random() * a0
                 accumulative = 0.0
 
@@ -240,27 +277,34 @@ class Solver:
                     if accumulative > random_a0:
                         break
 
-                # --------------------------------------------------------------
+                # -------------------------------------------------------------
                 # The parameters defined in the selected kineuron.Transition
                 # object are obtained.
-                # --------------------------------------------------------------
+                # -------------------------------------------------------------
                 transition = self.__model.get_transitions()[transition_name]
                 origin = transition.get_origin()
                 destination = transition.get_destination()
 
-                # --------------------------------------------------------------
+                # -------------------------------------------------------------
                 # The transition is executed by updating the number of vesicles
                 # in the kineuron.TransitionState objects involved.
-                # --------------------------------------------------------------
+                # -------------------------------------------------------------
                 self.__model.get_transition_states()[origin].pop_vesicle()
                 self.__model.get_transition_states()[destination].add_vesicle()
 
-                # --------------------------------------------------------------
+                # -------------------------------------------------------------
+                # The individual transition event is recorded for attachment to
+                # the results.
+                # -------------------------------------------------------------
+                if transition_name in save_transitions:
+                    dummy_transitions[transition_name] += 1
+
+                # -------------------------------------------------------------
                 # The previous steps are repeated until the end time of the
                 # simulation is reached.
-                # --------------------------------------------------------------
-        # ----------------------------------------------------------------------
+                # -------------------------------------------------------------
+        # ---------------------------------------------------------------------
         # The results of all iterations of the algorithm are saved.
-        # ----------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         self.__save_results(results, resting_state_simulation)
         del results

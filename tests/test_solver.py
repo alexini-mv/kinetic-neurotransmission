@@ -3,9 +3,10 @@ import random
 import unittest
 
 import pandas as pd
+from pandas.testing import assert_frame_equal
+
 from kineuron import (KineticModel, RateConstant, Solver, Stimulation,
                       Transition, TransitionState)
-from pandas.testing import assert_frame_equal
 
 
 class TestSolver(unittest.TestCase):
@@ -52,7 +53,7 @@ class TestSolver(unittest.TestCase):
         model2.add_transition_states(self.list_transition_states)
         model2.add_transitions(self.list_transitions)
         experiment = Solver(model=model2, stimulation=self.protocol)
-        
+
         self.assertRaises(AssertionError, experiment.resting_state)
 
     def test_not_resting_state(self) -> None:
@@ -68,8 +69,10 @@ class TestSolver(unittest.TestCase):
         self.experiment.resting_state()
 
         self.assertTrue(self.model._init_resting_state)
+
         self.assertIsInstance(
             self.experiment.get_resting_simulation(), pd.DataFrame)
+
         assert_frame_equal(
             self.experiment.get_resting_simulation(), actual_resting_state)
 
@@ -96,7 +99,8 @@ class TestSolver(unittest.TestCase):
 
         actual_run_results = pd.read_csv(file, index_col="time")
         self.experiment.resting_state()
-        self.experiment.run(repeat=10, time_end=1.0, time_save=0.0005)
+        self.experiment.run(repeat=10, time_end=1.0, time_save=0.0005,
+                            save_transitions=["Transition 1", "Transition 2"])
 
         self.assertIsInstance(self.experiment.get_results(), pd.DataFrame)
         assert_frame_equal(
@@ -108,6 +112,18 @@ class TestSolver(unittest.TestCase):
         vesicles = sum(self.model.get_current_state().values())
 
         self.assertEqual(vesicles, self.model.get_vesicles())
+
+    def test_save_transitions(self) -> None:
+        self.experiment.resting_state()
+
+        self.assertRaises(ValueError, self.experiment.run,
+                          save_transitions=["Custom Transition"])
+
+        self.experiment.run(save_transitions=["Transition 1", "Transition 2"])
+        results = self.experiment.get_results(mean=False)
+        transition_set = {"Transition 1", "Transition 2"}
+
+        self.assertTrue(transition_set.issubset(set(results.columns)))
 
 
 if __name__ == '__main__':

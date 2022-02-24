@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
+import random
 
 from kineuron import (KineticModel, RateConstant, Solver, Stimulation,
                       Transition, TransitionState)
@@ -21,7 +22,7 @@ model.add_transition_states([docked, fusion])
 model.add_transitions([tr1, tr2])
 
 model.init()
-model.get_info()
+# model.get_info()
 # graph = model.get_graph()
 # graph.view()
 
@@ -40,11 +41,12 @@ protocol = Stimulation(
 # protocol.plot(t)
 
 experiment = Solver(model=model, stimulation=protocol)
+
 experiment.resting_state()
 
-experiment.run(repeat=500)
-results = experiment.get_results(mean=True)
-# results.plot()
-# plt.show()
+experiment.run(repeat=10, time_end=1.0, time_save=0.0005,
+               save_transitions=["Transition 1", "Transition 2"])
 
-results.to_csv("results.csv", index=True)
+results = experiment.get_results(mean=True)
+
+# results.to_csv("results.csv", index=True)
