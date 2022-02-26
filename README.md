@@ -220,6 +220,7 @@ $ python main.py
 
 - 0.1.2
   - Added an option to include the individual events of the transitions in the results.
+  - A quantitative criterion was added to find the resting state automatically.
 - 0.1.1
   - Added a progress bar when simulations are running.
   - Fixed compatibility with pandas >=1.3.0 versions.

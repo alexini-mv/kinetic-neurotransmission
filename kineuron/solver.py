@@ -1,5 +1,5 @@
 import math
-from random import random
+from random import choice, random
 
 import pandas as pd
 from tqdm.auto import trange
@@ -45,25 +45,95 @@ class Solver:
         self.__model: KineticModel = model
         self.__stimulation: Stimulation = stimulation
 
-    def resting_state(self, time_end: float = 30.0) -> None:
+    def __resting_test(self, dataframe: pd.DataFrame, window_width: int,
+                       tolerance: float) -> tuple[dict, bool]:
+        """Auxiliary function that evaluates whether the model simulation has 
+        reached its resting state. The procedure of time averaging over moving 
+        time windows is followed. If the variation of the averages is less 
+        than the 'tolerance', then it is accepted that the resting state of 
+        the model has been reached.
+
+        Parameters
+        ----------
+        dataframe: pandas.DataFrame
+            Dataframe with the complete simulation record.
+        window_width: int
+            Number of columns with which the time average is be made.
+        tolerance: float
+            Percentage variation of vesicles tolerated in the kinetic states 
+            to accept the resting state.
+
+        Return
+        ------
+        dict
+            Dictionary with the name of the kinetic states and their numbers 
+            of vesicles corresponding to the resting state.
+        bool
+            Flag indicating that the resting state was found.
+        """
+        df = dataframe.rolling(window_width).mean(
+        ).iloc[range(0, len(dataframe), window_width)]
+        df2 = abs(100.0 * df.diff() / float(self.__model.get_vesicles()))
+        df2 = df2.dropna().sum(axis=1)
+
+        try:
+            index = df2[df2 < tolerance].idxmin()
+            state = df.loc[index].round().astype('int').to_dict()
+
+            difference = self.__model.get_vesicles() - sum(state.values())
+            if difference != 0:
+                random_name = choice(list(state.keys()))
+                state[random_name] += difference
+
+            return state, True
+
+        except ValueError:
+            return {}, False
+
+    def resting_state(self, time_end: float = 300.0,
+                      window_width: int = 3000,
+                      tolerance: float = 0.5) -> None:
         """Simulates the model from its initial state to the resting state.
 
         Parameters
         ----------
         time_end: float, optional
-            Time that the model will evolve to reach the resting state. The time
-            is measured in seconds.
+            Time that the model will evolve to reach the resting state. The 
+            time is measured in seconds.
+        window_width: int, optional
+            Number of columns with which the time averaging is done to find 
+            the resting state.
+        tolerance: float, optional
+            Percentage variation of vesicles tolerated in the kinetic states 
+            to accept the resting state.
         """
-        message = "The model is not initialized. Make sure to include the " + \
-            "'KineticModel.init()' method."
+        message = "The model is not initialized. Make sure to include " + \
+            "the 'KineticModel.init()' method."
         assert self.__model._init_flag, message
 
         print("\nDetermining Resting State...")
 
-        self.__gillespie(repeat=1, time_end=time_end, time_save=0.1,
-                         resting_state_simulation=True)
-        self.__model.set_resting_state()
-        self.__model._init_resting_state = True
+        for _ in trange(3, desc="Attempt",
+                        ascii=True, colour="green", initial=1, leave=False,
+                        bar_format="{desc}: {n_fmt}/{total_fmt} |{bar}|"):
+
+            self.__gillespie(repeat=1, time_end=time_end, time_save=0.01,
+                             resting_state_simulation=True)
+
+            state, success = self.__resting_test(
+                self.get_resting_simulation(), window_width, tolerance)
+
+            if success:
+                print("Set resting state...")
+                self.__model.set_resting_state(state)
+                print("Done")
+                break
+
+        if not success:
+            msg = "The system has not reached its resting state with the " + \
+                "specified 'tolerance'. Please, try to search with a " + \
+                "higher 'tolerance'."
+            print(msg)
 
     def run(self, repeat: int = 1, time_end: float = 1.0,
             time_save: float = 0.0001, method: str = 'gillespie',
@@ -87,7 +157,7 @@ class Solver:
             be included in the final results.
         """
         message = "The resting state has not been set in the model. Make sure " + \
-            "to include the 'Solver.resting_state()' method."
+            "to include the 'Solver.resting_state()' statement."
         assert self.__model._init_resting_state, message
 
         print("\nRunning Simulation of Model...")
@@ -122,14 +192,12 @@ class Solver:
             from a common run.
         """
         if resting_state_simulation:
-            print("Set resting state...")
             self.__resting_state_simulation = pd.DataFrame(
-                results).set_index(['run', 'time'])
+                results).set_index(['run', 'time']).droplevel(level=0)
         else:
             print("Generating results...")
             self.__results = pd.DataFrame(results).set_index(['run', 'time'])
-
-        print("Done")
+            print("Done")
 
     def get_results(self, mean: bool = False) -> pd.DataFrame:
         """Returns a pandas.DataFrame object containing the simulation results.
@@ -157,7 +225,7 @@ class Solver:
         ------
         pandas.DataFrame object.
         """
-        return self.__resting_state_simulation.droplevel(level=0)
+        return self.__resting_state_simulation
 
     def __list2dictzero(self, dummylist: list) -> dict:
         """Auxiliary function that converts a list of strings into a
@@ -200,7 +268,7 @@ class Solver:
         """
         results = []
 
-        for i in trange(repeat, desc="Progress: ", ascii=True, colour="green"):
+        for i in trange(repeat, desc="Progress: ", ascii=True, colour="green", disable=resting_state_simulation):
             # -----------------------------------------------------------------
             # Initialize the model in its previously found resting state.
             # -----------------------------------------------------------------
@@ -257,7 +325,7 @@ class Solver:
                     dummy = {"run": i, "time": round(tsave, 9)}
                     dummy.update(self.__model.get_current_state())
                     dummy.update(dummy_transitions)
-                    
+
                     results.append(dummy)
 
                     dummy_transitions = self.__list2dictzero(save_transitions)

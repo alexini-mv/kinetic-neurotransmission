@@ -9,6 +9,7 @@ from kineuron import (KineticModel, RateConstant, Solver, Stimulation,
                       Transition, TransitionState)
 
 
+
 class TestSolver(unittest.TestCase):
     def setUp(self) -> None:
         self.model = KineticModel(name='my-model', vesicles=100)
@@ -61,11 +62,6 @@ class TestSolver(unittest.TestCase):
 
     def test_resting_state(self) -> None:
         random.seed(135)
-        file = os.path.join(os.getcwd(),
-                            "tests",
-                            "__statics",
-                            "test_resting_state.csv")
-        actual_resting_state = pd.read_csv(file, index_col="time")
         self.experiment.resting_state()
 
         self.assertTrue(self.model._init_resting_state)
@@ -73,14 +69,13 @@ class TestSolver(unittest.TestCase):
         self.assertIsInstance(
             self.experiment.get_resting_simulation(), pd.DataFrame)
 
-        assert_frame_equal(
-            self.experiment.get_resting_simulation(), actual_resting_state)
+        self.assertDictEqual(
+            self.model.get_resting_state(), {'Docked': 98, 'Fusion': 2})
 
     def test_reset_init(self) -> None:
         random.seed(36)
-        for _ in range(10):
+        for _ in range(3):
             self.experiment.resting_state()
-            self.model.init()
 
         vesicles = sum(self.model.get_current_state().values())
 
@@ -103,6 +98,7 @@ class TestSolver(unittest.TestCase):
                             save_transitions=["Transition 1", "Transition 2"])
 
         self.assertIsInstance(self.experiment.get_results(), pd.DataFrame)
+
         assert_frame_equal(
             self.experiment.get_results(mean=True), actual_run_results)
 

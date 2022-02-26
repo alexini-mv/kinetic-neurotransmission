@@ -1,7 +1,5 @@
 from graphviz import Digraph
 
-from kineuron import transition_state
-
 from .neuromuscular import Synapse
 
 
@@ -223,7 +221,7 @@ class KineticModel(Synapse):
             else:
                 value.update(0)
 
-        self.set_resting_state()
+        self.set_resting_state(self.get_current_state())
 
         self._init_flag: bool = True
         self._init_resting_state: bool = False
@@ -242,10 +240,17 @@ class KineticModel(Synapse):
         for name, state in self.__transition_states.items():
             state.update(dictionary_state[name])
 
-    def set_resting_state(self) -> None:
+    def set_resting_state(self, dictionary_state: dict) -> None:
         """Sets the model resting state.
+
+        Parameters
+        ----------
+        dictionary_state: dict
+            Dictionary with the name of all kineuron.TransitionState objects
+            and the number of vesicles in each state.
         """
-        self.__resting_state = self.get_current_state()
+        self.__resting_state = dictionary_state
+        self._init_resting_state: bool = True
 
     def get_resting_state(self) -> dict:
         """Returns the values of the model defined in its resting state.
