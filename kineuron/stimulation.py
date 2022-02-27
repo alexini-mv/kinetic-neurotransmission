@@ -1,4 +1,5 @@
 import math
+from types import FunctionType
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -25,16 +26,23 @@ class Stimulation(Synapse):
     """
 
     def __init__(self, name: str = "Stimulation Protocol",
+                 type_stimulus: str = 'exponential_decay',
                  time_start_stimulation: float = None,
                  conditional_stimuli: int = None, period: float = None,
                  tau_stimulus: float = None, intensity_stimulus: float = None,
-                 time_wait_test: float = None,
-                 type_stimulus: str = 'exponential_decay') -> None:
+                 time_wait_test: float = None, func: FunctionType = None) -> None:
         """
         Parameters
         ----------
         name : str, optional
             Stimulation protocol name.
+        type_stimulus : str, opcional
+            Profile of each individual stimulus. By default, the argument 
+            value is 'exponential_delay' which corresponds to a stimulus 
+            with an instantaneous rise followed by an exponential decay.
+            If the argument value is 'customized', you must provide a 
+            function f(t) in the 'func' argument that returns the customized 
+            stimulation profile.
         time_start_stimulation : float
             Time at which the stimulation starts within the time evolution of 
             the model simulation.
@@ -51,29 +59,38 @@ class Stimulation(Synapse):
         time_wait_test : float
             Waiting time interval between the last conditional stimulus and 
             the test stimulus.
-        type_stimulus : str, opcional
-            Profile of each individual stimulus. By default, the parameter 
-            value is 'exponential_delay' which corresponds to a stimulus 
-            with an instantaneous rise followed by an exponential decay.
+        func : FunctionType, optional
+            Function f(t) that you must provide when the argument 
+            'type_stimulation' is 'customized'. 
         """
 
         super().__init__(name)
 
-        message = f"The '{self.__class__.__name__}' object does not accept" + \
-            f" '{type_stimulus}' as a valid value of 'type_stimulus'."
-
-        assert type_stimulus == 'exponential_decay', message
-
-        epsilon = 0.005
-        self.__time_start_stimulation: float = time_start_stimulation
-        self.__conditional_stimuli: int = conditional_stimuli
-        self.__period: float = period
-        self.__tau_stimulus: float = tau_stimulus
-        self.__time_wait_test: float = time_wait_test
-        self.__intensity_stimulus: float = intensity_stimulus
         self.__type_stimulus: str = type_stimulus
-        self.__time_end_stimulation: float = time_start_stimulation + \
-            (conditional_stimuli - 1) * period + epsilon
+
+        if type_stimulus == "customized":
+            message = f"The 'type_stimulus' argument is 'customized'. " + \
+                f"Please provide a {FunctionType} object in 'func' argument."
+            assert isinstance(func, FunctionType), message
+
+            self.__customized_func: FunctionType = func
+
+        else:
+            message = f"The '{self.__class__.__name__}' object does not accept" + \
+                f" '{type_stimulus}' as a valid value of 'type_stimulus'."
+
+            if type_stimulus != 'exponential_decay':
+                raise ValueError(message)
+
+            epsilon = 0.005
+            self.__time_start_stimulation: float = time_start_stimulation
+            self.__conditional_stimuli: int = conditional_stimuli
+            self.__period: float = period
+            self.__tau_stimulus: float = tau_stimulus
+            self.__time_wait_test: float = time_wait_test
+            self.__intensity_stimulus: float = intensity_stimulus
+            self.__time_end_stimulation: float = time_start_stimulation + \
+                (conditional_stimuli - 1) * period + epsilon
 
     def __str__(self) -> str:
         """Builds a string with the general information of the stimulation 
@@ -89,27 +106,33 @@ class Stimulation(Synapse):
             General information defined within the Stimulation object.
         """
         width = 65
-        left = 35
+        left = 40
 
-        msg = [
-            "  STIMULATION PROTOCOL OVERVIEW  ".center(width, "="),
-            "* Name:".ljust(left) + self.get_name(),
-            "* Type of stimulus:".ljust(left) + self.__type_stimulus,
-            "* Conditional stimuli:".ljust(left) +
-            str(self.__conditional_stimuli),
-            "* Start time:".ljust(left) +
-            str(self.__time_start_stimulation) + " s",
-            "* Conditional stimuli period:".ljust(
-                left) + str(self.__period) + " s",
-            "* Time constant of the stimuli:".ljust(
-                left) + str(self.__tau_stimulus) + " s",
-            "* Waiting time between last",
-            "  conditional and test stimuli:".ljust(
-                    left) + str(self.__time_wait_test) + " s",
-            "* Stimulus intensity:".ljust(left) +
-            str(self.__intensity_stimulus),
-            "".center(width, "=")
-        ]
+        msg = ["  STIMULATION PROTOCOL OVERVIEW  ".center(width, "="),
+               " - Name:".ljust(left) + self.get_name(),
+               " - Type of stimulus:".ljust(left) +
+               self.__type_stimulus.capitalize().replace("_", " ")]
+
+        if self.__type_stimulus == 'customized':
+            aux = [" - Function name:".ljust(left) +
+                   self.__customized_func.__name__]
+        else:
+            aux = [" - Conditional stimuli:".ljust(left) +
+                   str(self.__conditional_stimuli),
+                   " - Start time:".ljust(left) +
+                   str(self.__time_start_stimulation) + " s",
+                   " - Conditional stimuli period:".ljust(left) +
+                   str(self.__period) + " s",
+                   " - Time constant of the stimuli:".ljust(left) +
+                   str(self.__tau_stimulus) + " s",
+                   " - Waiting time between last",
+                   "   conditional and test stimuli:".ljust(left) +
+                   str(self.__time_wait_test) + " s",
+                   " - Stimulus intensity:".ljust(left) +
+                   str(self.__intensity_stimulus)]
+
+        msg = msg + aux + ["".center(width, "=")]
+
         return "\n".join(msg)
 
     def get_info(self) -> None:
@@ -127,7 +150,8 @@ class Stimulation(Synapse):
         print(self.__str__())
 
     def stimuli(self, t: float) -> float:
-        '''Function that models the stimulation protocol.
+        '''Calls the specific stimulation function depending on the value 
+        of type_stimulus.
 
         Parameters
         ----------
@@ -139,23 +163,10 @@ class Stimulation(Synapse):
         float
             The stimulus value at time t.
         '''
-
-        delta_time = t - self.__time_start_stimulation
-
-        time_test = self.__time_start_stimulation + (self.__conditional_stimuli
-                                                     - 1) * self.__period + self.__time_wait_test
-
-        if t >= self.__time_start_stimulation and t < self.__time_end_stimulation:
-            f = math.exp(-(delta_time % self.__period) / self.__tau_stimulus)
-        elif t >= self.__time_end_stimulation and t < time_test:
-            f = math.exp(-(delta_time - (self.__conditional_stimuli - 1)
-                         * self.__period) / self.__tau_stimulus)
-        elif t >= time_test:
-            f = math.exp(-(t - time_test) / self.__tau_stimulus)
+        if self.__type_stimulus == 'exponential_decay':
+            return self.__exponential_decay(t)
         else:
-            f = 0.0
-
-        return self.__intensity_stimulus * f
+            return self.__customized_func(t)
 
     def plot(self, t: float, xlabel: str = "Time",
              ylabel: str = "Intensity", **kwargs) -> None:
@@ -170,9 +181,44 @@ class Stimulation(Synapse):
         ylabel : str, optional
             Name of the y-axis label of the graph. Default 'Intensity'.
         """
-        y = np.vectorize(self.stimuli)(t)
-        plt.plot(t, y, **kwargs)
+        f = np.vectorize(self.stimuli)
+        plt.plot(t, f(t), **kwargs)
         plt.title(self.get_name())
         plt.xlabel(xlabel)
         plt.ylabel(ylabel)
         plt.show()
+
+    def __exponential_decay(self, t: float) -> float:
+        '''Function that models the stimulation protocol with exponential 
+        stimulus decay profile.
+
+        Parameters
+        ----------
+        t : float
+            Time variable within the model simulation.
+
+        Return
+        ------
+        float
+            The stimulus value at time t.
+        '''
+        delta_time = t - self.__time_start_stimulation
+
+        time_test = self.__time_start_stimulation + \
+            (self.__conditional_stimuli - 1) * self.__period + \
+            self.__time_wait_test
+
+        if t >= self.__time_start_stimulation and t < self.__time_end_stimulation:
+            f = math.exp(-(delta_time % self.__period) / self.__tau_stimulus)
+
+        elif t >= self.__time_end_stimulation and t < time_test:
+            f = math.exp(-(delta_time - (self.__conditional_stimuli - 1)
+                         * self.__period) / self.__tau_stimulus)
+
+        elif t >= time_test:
+            f = math.exp(-(t - time_test) / self.__tau_stimulus)
+
+        else:
+            f = 0.0
+
+        return self.__intensity_stimulus * f

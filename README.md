@@ -41,29 +41,29 @@ There are two ways to install KiNeuron:
 
 1. Via PyPI repository (recommended):
 
-    - In your local workspace, create a new Python Virtual Environment with [venv](https://docs.python.org/3/library/venv.html) or [conda](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html).
-    - Install KiNeuron as follow:
+   - In your local workspace, create a new Python Virtual Environment with [venv](https://docs.python.org/3/library/venv.html) or [conda](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html).
+   - Install KiNeuron as follow:
 
-    ```console
-    $ python -m pip install -U kineuron
-    ```
+   ```console
+   $ python -m pip install -U kineuron
+   ```
 
-    - All dependencies are downloaded and installed. To verify that it has been installed correctly, you can check the following output:
+   - All dependencies are downloaded and installed. To verify that it has been installed correctly, you can check the following output:
 
-    ```console
-    $ python -c "import kineuron; print(kineuron.__version__)"
-    '0.1.2'
-    ```
+   ```console
+   $ python -c "import kineuron; print(kineuron.__version__)"
+   '0.1.2'
+   ```
 
 2. Via GitHub:
 
-    - Clone this project [repository](https://github.com/alexini-mv/kinetic-neurotransmission) to your local workspace.
-    - Create a new Python Virtual Environment with [venv](https://docs.python.org/3/library/venv.html) or [conda](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html).
-    - Install the required libraries from the file `requeriments.txt` into your virtual environment as follow:
+   - Clone this project [repository](https://github.com/alexini-mv/kinetic-neurotransmission) to your local workspace.
+   - Create a new Python Virtual Environment with [venv](https://docs.python.org/3/library/venv.html) or [conda](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html).
+   - Install the required libraries from the file `requeriments.txt` into your virtual environment as follow:
 
-    ```console
-    $ python -m pip install -r requeriments.txt
-    ```
+   ```console
+   $ python -m pip install -r requeriments.txt
+   ```
 
 You are ready to use KiNeuron.
 
@@ -221,13 +221,14 @@ $ python main.py
 - 0.1.2
   - Added an option to include the individual events of the transitions in the results.
   - A quantitative criterion was added to find the resting state automatically.
+  - Added the ability to include an external custom function when instantiating the Stimulation object.
 - 0.1.1
   - Added a progress bar when simulations are running.
   - Fixed compatibility with pandas >=1.3.0 versions.
-  - Simplification of adding objects to the model. It is not necessary to 
+  - Simplification of adding objects to the model. It is not necessary to
     explicitly declare `KineticModel.add_rate_constants()` method.
   - Added a _AssertionError_ if the model is not initialized.
-  - Bug fixed in the number of vesicles when calling two or more times `KineticModel.init()` 
+  - Bug fixed in the number of vesicles when calling two or more times `KineticModel.init()`
     method.
 - 0.1.0
   - Stable version released.

@@ -21,11 +21,14 @@ class TestStimulation(unittest.TestCase):
     def test_get_name(self) -> None:
         self.assertEqual(self.stimulation.get_name(), "Protocol")
 
-    def test_type_stimulus_assert(self) -> None:
+    def test_type_stimulus(self) -> None:
         self.parameters["type_stimulus"] = "linear_decay"
-
-        with self.assertRaises(AssertionError):
+        with self.assertRaises(ValueError):
             Stimulation(**self.parameters)
+
+    def test_type_stimulus_customized(self) -> None:
+        with self.assertRaises(AssertionError):
+            Stimulation(type_stimulus="customized")
 
     def test_stimuli(self) -> None:
         actual = np.array([100.0,
