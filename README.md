@@ -3,7 +3,7 @@
 ## KiNeuron: Python implementation of the kinetic model of neuromuscular transmission dynamics.
 
 ![](https://img.shields.io/static/v1?label=python&message=3.6%20|%203.7%20|%203.8%20|%203.9%20|%203.10&color=informational)
-[![](https://img.shields.io/static/v1?label=pypi%20package&message=v0.1.2&color=%2334D058)](https://pypi.org/project/kineuron/)
+[![](https://img.shields.io/static/v1?label=pypi%20package&message=v0.1.3&color=%2334D058)](https://pypi.org/project/kineuron/)
 ![](https://img.shields.io/static/v1?label=test&message=passed&color=%2334D058)
 [![](https://img.shields.io/static/v1?label=DOI&message=10.3389/fnsyn.2021.785361&color=informational)](https://doi.org/10.3389/fnsyn.2021.785361)
 
@@ -52,7 +52,7 @@ There are two ways to install KiNeuron:
 
    ```console
    $ python -c "import kineuron; print(kineuron.__version__)"
-   '0.1.2'
+   '0.1.3'
    ```
 
 2. Via GitHub:
@@ -218,6 +218,8 @@ $ python main.py
 
 ## Changelog
 
+- 0.1.3
+  - Fixed bug compatibility typing with python <= 3.8 versions.
 - 0.1.2
   - Added an option to include the individual events of the transitions in the results.
   - A quantitative criterion was added to find the resting state automatically.
