@@ -1,5 +1,6 @@
 import math
 from random import choice, random
+from typing import Tuple
 
 import pandas as pd
 from tqdm.auto import trange
@@ -46,7 +47,7 @@ class Solver:
         self.__stimulation: Stimulation = stimulation
 
     def __resting_test(self, dataframe: pd.DataFrame, window_width: int,
-                       tolerance: float) -> tuple[dict, bool]:
+                       tolerance: float) -> Tuple[dict, bool]:
         """Auxiliary function that evaluates whether the model simulation has 
         reached its resting state. The procedure of time averaging over moving 
         time windows is followed. If the variation of the averages is less 
