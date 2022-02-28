@@ -72,16 +72,34 @@ class Solver:
         bool
             Flag indicating that the resting state was found.
         """
+        # ---------------------------------------------------------------------
+        # Averages are obtained in time windows.
+        # ---------------------------------------------------------------------
         df = dataframe.rolling(window_width).mean(
         ).iloc[range(0, len(dataframe), window_width)]
+
+        # ---------------------------------------------------------------------
+        # The percentage variations between the averages in the time windows 
+        # are obtained.
+        # ---------------------------------------------------------------------
         df2 = abs(100.0 * df.diff() / float(self.__model.get_vesicles()))
         df2 = df2.dropna().sum(axis=1)
 
         try:
+            # -----------------------------------------------------------------
+            # If the total percentage variation is less than the tolerance, 
+            # the smaller one is chosen.
+            # -----------------------------------------------------------------
             index = df2[df2 < tolerance].idxmin()
             state = df.loc[index].round().astype('int').to_dict()
 
+            # -----------------------------------------------------------------
+            # It is checked if the rounding of the results caused the loss or 
+            # excess of vesicles. If there is a difference, it is compensated 
+            # in a randomly chosen transition state.
+            # -----------------------------------------------------------------
             difference = self.__model.get_vesicles() - sum(state.values())
+            
             if difference != 0:
                 random_name = choice(list(state.keys()))
                 state[random_name] += difference
